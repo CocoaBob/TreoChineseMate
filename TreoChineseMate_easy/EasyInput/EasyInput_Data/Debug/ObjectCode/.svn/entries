@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/EasyInput/EasyInput_Data/Debug/ObjectCode"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   committed-rev="1"
+   name="EasyInput_Rsc.rcp.ro"
+   text-time="2006-05-09T12:28:16.171875Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="6f92a19c7486a42faabeef63f71b0114"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:28:16.140625Z"/>
+</wc-entries>

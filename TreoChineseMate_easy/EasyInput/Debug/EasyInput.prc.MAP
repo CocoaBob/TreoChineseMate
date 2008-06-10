@@ -1,0 +1,124 @@
+File:    1	"__RuntimeModule__"
+File:    2	"D:\Private\Metrowerks\CodeWarrior\Palm OS Support\CodeWarrior Libraries\Runtime\PalmOSRuntime_2i_A5.lib"
+File:    3	"CPlusLib68K.cp"
+File:    4	"Exception68K.cp"
+File:    5	"LongLong68K.c"
+File:    6	"MWRTTI.cp"
+File:    7	"NMWException.cp"
+File:    8	"NewMore.cp"
+File:    9	"New.cp"
+File:   10	"PalmOS_AbortExit.cpp"
+File:   11	"PalmOS_GlobalDestructors.c"
+File:   12	"PalmOS_setjmp.c"
+File:   13	"PalmOS_Startup.cpp"
+File:   14	"CWRuntime.c"
+File:   15	"D:\Private\MW_WorkSpace\EasyInput\Rsc\EasyInput_Rsc.rcp"
+File:   16	"D:\Private\MW_WorkSpace\EasyInput\Src\EasyInput.c"
+File:   17	"D:\Private\MW_WorkSpace\EasyInput\Src\CLib.c"
+
+Segment:   1   17814 bytes  "Segment 1"
+Code: 000004      12 bytes  "__DummyStartup__"               File: "__RuntimeModule__"
+Code: 000010      12 bytes  "__dthandler__4MTWKFv"           File: "NMWException.cp"
+Code: 00001c      12 bytes  "__duhandler__4MTWKFv"
+Code: 000028      16 bytes  "terminate__3stdFv"
+Code: 000038      24 bytes  "abort"                          File: "PalmOS_AbortExit.cpp"
+Code: 000050      42 bytes  "__destroy_global_chain"         File: "PalmOS_GlobalDestructors.c"
+Code: 00007a      14 bytes  "setjmp"                         File: "PalmOS_setjmp.c"
+Code: 000088      18 bytes  "longjmp"
+Code: 00009a     154 bytes  "__Relocate____4MTWKFPScPScUl"   File: "PalmOS_Startup.cpp"
+Code: 000134     314 bytes  "__Startup__"
+Code: 00026e       8 bytes  "__PreInit__"
+Code: 000276       8 bytes  "__InitCode__"
+Code: 00027e     132 bytes  "__SkipToXREFs____4MTWKFPSc"
+Code: 000302     128 bytes  "__PatchV10Devices____4MTWKFP14SysAppInfoType"
+Code: 000382     234 bytes  "__LoadAndRelocate____4MTWKFUcP7_opaque"
+Code: 00046c      52 bytes  "getContactUnitById_Addr"        File: "D:\Private\MW_WorkSpace\EasyInput\Src\EasyInput.c"
+Code: 0004a0      52 bytes  "getContactUnitById_PAdd"
+Code: 0004d4      84 bytes  "freeContactList"
+Code: 000528     226 bytes  "getPhoneLabelText"
+Code: 00060a     204 bytes  "getSelectedPhoneField"
+Code: 0006d6     114 bytes  "numericKeyTranslator"
+Code: 000748      60 bytes  "keyTranslator"
+Code: 000784      98 bytes  "buildFullName_Addr"
+Code: 0007e6      98 bytes  "buildFullName_PAdd"
+Code: 000848     858 bytes  "getActionParameter"
+Code: 000ba2     450 bytes  "getContactList_Addr"
+Code: 000d64     450 bytes  "getContactList_PAdd"
+Code: 000f26     414 bytes  "drawContactListByContact_Addr"
+Code: 0010c4     414 bytes  "drawContactListByContact_PAdd"
+Code: 001262      72 bytes  "setListFrameColor"
+Code: 0012aa     318 bytes  "popupEventHandler"
+Code: 0013e8     136 bytes  "drawPopupPhoneNumberList"
+Code: 001470     972 bytes  "popupPhoneNumberList"
+Code: 00183c     112 bytes  "updateFormControlPtr"
+Code: 0018ac     136 bytes  "addKeyToPhoneNumber"
+Code: 001934     136 bytes  "addKeyToKeyword"
+Code: 0019bc     924 bytes  "contactKeyHandleEvent"
+Code: 001d58     608 bytes  "contactAppHandleEvent"
+Code: 001fb8      76 bytes  "freeFieldTextHandle"
+Code: 002004     958 bytes  "easyInputContactHandler"
+Code: 0023c2     178 bytes  "updateDateTime"
+Code: 002474     774 bytes  "puncKeyHandleEvent"
+Code: 00277a     182 bytes  "getQuickText"
+Code: 002830     686 bytes  "puncAppHandleEvent"
+Code: 002ade     348 bytes  "easyInputPuncHandler"
+Code: 002c3a     232 bytes  "SMSGetActionParameter"
+Code: 002d22     144 bytes  "getRecentList"
+Code: 002db2     728 bytes  "saveContactToRecentDB"
+Code: 00308a      54 bytes  "SMSUpdateFormControlPtr"
+Code: 0030c0     230 bytes  "createContactList"
+Code: 0031a6     306 bytes  "drawContactListByRecent"
+Code: 0032d8     258 bytes  "drawPYAndPhone"
+Code: 0033da      72 bytes  "SMSSetListFrameColor"
+Code: 003422     292 bytes  "SMSPopupEventHandler"
+Code: 003546     118 bytes  "SMSDrawPopupPhoneNumberList"
+Code: 0035bc     910 bytes  "SMSPopupPhoneNumberList"
+Code: 00394a      88 bytes  "SMSAddKeyToPhoneNumber"
+Code: 0039a2      88 bytes  "SMSAddKeyToKeyword"
+Code: 0039fa     624 bytes  "SMSKeyHandleEvent"
+Code: 003c6a     248 bytes  "SMSAppHandleEvent"
+Code: 003d62    1322 bytes  "easyInputSMSContactSearchHandler"
+Code: 00428c     402 bytes  "PilotMain"
+Code: 00441e      62 bytes  "CLibLoad"                       File: "D:\Private\MW_WorkSpace\EasyInput\Src\CLib.c"
+Code: 00445c      46 bytes  "CLibRemove"
+Code: 00448a     180 bytes  "initCNLBGlobeParameter"
+Code: 00453e      88 bytes  "constructPYKeyword"
+
+Data section below A5:      8 bytes
+Data section above A5:    168 bytes
+
+Uninitialized near data
+Data:     -4       4 bytes  "__CW_FEATURES_PTR"
+Data:     -8       4 bytes  "__global_destructor_chain"
+
+Initialized far data
+Data:     40     128 bytes  "__segtable__"
+
+-----
+
+PRC DB Name:       EasyInput
+PRC DB Version:    1
+Type:              appl
+Creator:           EzIP
+Resource Count:    10
+Creation Time:     2007-02-26 @ 1841
+Modification Time: 2007-02-26 @ 1841
+Last Backup Time:  
+Attributes:         0x00000009
+                    dmHdrAttrResDB
+                    dmHdrAttrBackup
+
+1:   tAIN           Application Name String            1000 (0x03e8)     10
+[EasyInput]
+2:   tver           Application Version String         1000 (0x03e8)     4
+[1.0]
+3:   code           68K Object Code                    1 (0x0001)        17814
+4:   data           68K Global Data                    0 (0x0000)        107
+5:   code           68K Object Code                    0 (0x0000)        24
+6:   tFRM           Form                               1001 (0x03e9)     492
+7:   tFRM           Form                               1016 (0x03f8)     320
+8:   Talt           Alert                              1025 (0x0401)     53
+9:   tSTR           String                             1026 (0x0402)     148
+[¿ì½Ý²Ù×÷ËµÃ÷__1¡¢Ê¹ÓÃ·½Ïò¼üÑ¡ÔñÐèÒªµÄÄÚÈÝ£¬°´ÖÐ¼ä½¨·µ»Ø£»_2¡...]
+10:   tSTR           String                             1027 (0x0403)     288
+[¿ì½Ý²Ù×÷ËµÃ÷__1¡¢°´ÈëÆ´ÒôÊ××ÖÄ¸»òÊý×Ö½øÐÐÁªÏµÈË¼ìË÷£»_2¡¢ÓÃÉ...]

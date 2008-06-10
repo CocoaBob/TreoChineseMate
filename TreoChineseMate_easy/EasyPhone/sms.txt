@@ -1,0 +1,79 @@
+1. open phone library
+
+	=> refNum
+
+2. create a new message of the given message type and return the recordId in the message database:
+
+PhnDatabaseID PhnLibNewMessage(UInt16 refNum, SMSMessageType type)
+	<= SMSMessageType{kMTIncoming, kMTOutgoing}
+	=>PhnDatabaseID
+
+3. set the message text:
+
+Err PhnLibSetText(UInt16 refNum, PhnDatabaseID msgID, const char* data, Int16 size)
+
+4. set the message date:
+
+Err PhnLibSetDate(UInt16 refNum, PhnDatabaseID msgID, UInt32 date)
+	<= date:TimGetSeconds()
+
+5. set the send options:
+
+Err PhnLibSetOptions(UInt16 refNum, PhnDatabaseID msgID, const SMSSendOptions* options)
+	typedef struct  {
+	  Boolean freeReply;		/**<		*/
+	  Boolean statusReport;		/**<		*/
+	  unsigned char validity;	/**<		*/
+	}SMSSendOptions;
+
+6. set the msg address:
+
+Err PhnLibSetAddresses(UInt16 refNum, PhnDatabaseID msgID, const PhnAddressList list)
+
+typedef VoidHand	PhnAddressList //The address is seperated by ";"
+	to build the address, try:
+	1) PhnAddressList PhnLibNewAddressList(UInt16 refNum)
+	2) Err PhnLibAddAddress(UInt16 refNum, PhnAddressList list, const PhnAddressHandle address) //VoidHand	PhnAddressHandle
+	3) Err PhnLibDisposeAddressList(UInt16 refNum, PhnAddressList list)
+
+7. set the msg status:
+
+Err PhnLibSetStatus(UInt16 refNum, PhnDatabaseID msgID, SMSMessageStatus status)
+
+typedef enum  {
+  kNone,			/**<		*/
+  kReceiving, kReceived,	/**<		*/
+  kPending, kSending, kSent	/**<		*/
+}SMSMessageStatus;
+
+8. set the msg flag
+
+Err PhnLibSetFlags(UInt16 refNum, PhnDatabaseID msgID, UInt32 flags)
+
+typedef enum  {
+  kGreekSymbols = 1L << 0,		/**<		*/
+  kMissingPart =	1L << 1,	/**<		*/
+  kAutoDelete =	1L << 2,		/**<		*/
+  kNotification = 1L << 3,		/**<		*/
+  kDontEncode =	1L << 4,		/**<		*/
+  kSubstitution = 1L << 5,		/**<		*/
+  kFailed =		1L << 6,	/**<		*/
+  kStatusReport = 1L << 7,		/**<		*/
+  kFreeReply =	1L << 8,		/**<		*/
+  kInternetEMail =1L << 9,		/**<		*/
+  kTextSegments =	1L << 10,	/**<		*/
+  kSMSErrorType1 = 1L << 11,		/**<		*/
+  kSMSErrorType2 = 1L << 12,		/**<		*/
+  kSMSErrorType3 = 1L << 13,		/**<		*/
+  kSMSHighPriority = 1L << 14,		/**<		*/
+  kSMSLowPriority = 1L << 15,		/**<		*/
+		// application-level flags
+  kRead = 1L << 16,			/**<		*/
+  kDeferredDelivery = 1L << 17,		/**<		*/
+  kWAPMsg = 1L << 18			/**<		*/
+}SMSMessageFlags;
+
+9. set the msg owner
+
+Err PhnLibSetOwner(UInt16 refNum, PhnDatabaseID msgID, UInt32 owner)
+

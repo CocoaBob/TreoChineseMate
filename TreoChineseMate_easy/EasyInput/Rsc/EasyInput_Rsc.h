@@ -1,0 +1,26 @@
+/* pilrc generated file.  Do not edit!*/
+#define stringEasyInputContactTip 1027
+#define stringEasyInputPuncTip 1026
+#define alertLoadPYLibraryError 1025
+#define btnExitEasyInputContact 1024
+#define btnEasyInputContactHelp 1023
+#define lstContacts 1022
+#define fldPhoneNumber 1021
+#define fldPYKeyword 1019
+#define btnGetTotal 1017
+#define frmEasyInputContacts 1016
+#define btnExitEasyInputPunc 1015
+#define btnEasyInputPuncHelp 1014
+#define btnOpenEasyInputContact 1013
+#define lstQuickText 1012
+#define pbtnTime 1011
+#define pbtnDate 1010
+#define pbtnPunc7 1009
+#define pbtnPunc6 1008
+#define pbtnPunc5 1007
+#define pbtnPunc4 1006
+#define pbtnPunc3 1005
+#define pbtnPunc2 1004
+#define pbtnPunc1 1003
+#define pbtnPunc0 1002
+#define frmEasyInputPunc 1001

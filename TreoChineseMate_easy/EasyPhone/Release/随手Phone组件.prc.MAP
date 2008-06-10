@@ -1,0 +1,151 @@
+File:    1	"__RuntimeModule__"
+File:    2	"D:\Private\Metrowerks\CodeWarrior\Palm OS Support\CodeWarrior Libraries\Runtime\PalmOSRuntime_2i_A5.lib"
+File:    3	"CPlusLib68K.cp"
+File:    4	"Exception68K.cp"
+File:    5	"LongLong68K.c"
+File:    6	"MWRTTI.cp"
+File:    7	"NMWException.cp"
+File:    8	"NewMore.cp"
+File:    9	"New.cp"
+File:   10	"PalmOS_AbortExit.cpp"
+File:   11	"PalmOS_GlobalDestructors.c"
+File:   12	"PalmOS_setjmp.c"
+File:   13	"PalmOS_Startup.cpp"
+File:   14	"CWRuntime.c"
+File:   15	"D:\Private\MW_WorkSpace\EasyPhone\Rsc\EasyPhone_Rsc.rcp"
+File:   16	"D:\Private\MW_WorkSpace\EasyPhone\Src\EasyPhone.c"
+File:   17	"D:\Private\MW_WorkSpace\EasyPhone\Src\CLib.c"
+File:   18	"D:\Private\Metrowerks\CodeWarrior\Palm OS Support\CodeWarrior Libraries\Palm OS Glue\PalmOSGlue.lib"
+File:   19	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\IntlGlue.cp"
+File:   20	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\TextMgr.c"
+File:   21	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\TxtGlue.cp"
+File:   22	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\TsmGlue.cp"
+File:   23	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\WinGlue.cp"
+File:   24	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\FntGlue.cp"
+File:   25	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\DateGlue.cp"
+File:   26	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\SysGlue.cp"
+File:   27	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\OmGlue.cp"
+File:   28	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\ResGlue.cp"
+File:   29	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\LmGlue.cp"
+File:   30	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\FrmGlue.cpp"
+File:   31	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\AccessorGlue.cp"
+File:   32	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\MemGlue.cp"
+File:   33	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\BmpGlue.cp"
+File:   34	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\TblGlue.cp"
+File:   35	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\UIColorGlue.cp"
+
+Segment:   1   21852 bytes  "Segment 1"
+Code: 000004      12 bytes  "__DummyStartup__"               File: "__RuntimeModule__"
+Code: 000010      12 bytes  "__dthandler__4MTWKFv"           File: "NMWException.cp"
+Code: 00001c      12 bytes  "__duhandler__4MTWKFv"
+Code: 000028      16 bytes  "terminate__3stdFv"
+Code: 000038      24 bytes  "abort"                          File: "PalmOS_AbortExit.cpp"
+Code: 000050      42 bytes  "__destroy_global_chain"         File: "PalmOS_GlobalDestructors.c"
+Code: 00007a      14 bytes  "setjmp"                         File: "PalmOS_setjmp.c"
+Code: 000088      18 bytes  "longjmp"
+Code: 00009a     154 bytes  "__Relocate____4MTWKFPScPScUl"   File: "PalmOS_Startup.cpp"
+Code: 000134     314 bytes  "__Startup__"
+Code: 00026e       8 bytes  "__PreInit__"
+Code: 000276       8 bytes  "__InitCode__"
+Code: 00027e     132 bytes  "__SkipToXREFs____4MTWKFPSc"
+Code: 000302     128 bytes  "__PatchV10Devices____4MTWKFP14SysAppInfoType"
+Code: 000382     234 bytes  "__LoadAndRelocate____4MTWKFUcP7_opaque"
+Code: 00046c      32 bytes  "__lmul__"                       File: "CWRuntime.c"
+Code: 00048c      46 bytes  "getContactUnitById_Addr"        File: "D:\Private\MW_WorkSpace\EasyPhone\Src\EasyPhone.c"
+Code: 0004ba      46 bytes  "getContactUnitById_PAdd"
+Code: 0004e8     102 bytes  "freeContactList"
+Code: 00054e      74 bytes  "StrDigitCopy"
+Code: 000598      36 bytes  "isFieldTextSelected"
+Code: 0005bc     210 bytes  "getPhoneLabelText"
+Code: 00068e     202 bytes  "getMatchedPhoneField"
+Code: 000758     226 bytes  "getSelectedPhoneField"
+Code: 00083a     190 bytes  "getSelectedPhoneLabel"
+Code: 0008f8     344 bytes  "getRecordByPhoneNumber"
+Code: 000a50      68 bytes  "keyTranslator"
+Code: 000a94      92 bytes  "buildFullName_Addr"
+Code: 000af0      92 bytes  "buildFullName_PAdd"
+Code: 000b4c     164 bytes  "constructPreFix"
+Code: 000bf0     872 bytes  "getActionParameter"
+Code: 000f58     146 bytes  "getRecentList"
+Code: 000fea      30 bytes  "deleteRecentItem"
+Code: 001008     376 bytes  "saveContactToRecentDB"
+Code: 001180     774 bytes  "getContactList_Addr"
+Code: 001486     774 bytes  "getContactList_PAdd"
+Code: 00178c     302 bytes  "updateFormControlPtr"
+Code: 0018ba     692 bytes  "copyDefaultPhoneNumber"
+Code: 001b6e      68 bytes  "setListFrameColor"
+Code: 001bb2     266 bytes  "drawContactListByRecent"
+Code: 001cbc     838 bytes  "drawContactListByContact_Addr"
+Code: 002002     838 bytes  "drawContactListByContact_PAdd"
+Code: 002348     166 bytes  "getSkinBitmap"
+Code: 0023ee     942 bytes  "createContactsForm"
+Code: 00279c     136 bytes  "getFocusedObjectBounds"
+Code: 002824     176 bytes  "drawPYKeyword"
+Code: 0028d4     372 bytes  "updateContactsForm"
+Code: 002a48     656 bytes  "popupEventHandler"
+Code: 002cd8     104 bytes  "drawPopupPhoneNumberList"
+Code: 002d40     850 bytes  "popupPhoneNumberList"
+Code: 003092      68 bytes  "addKeyToKeyword"
+Code: 0030d6    2050 bytes  "keyHandleEvent"
+Code: 0038d8    1206 bytes  "keyHandleEvent_OLD"
+Code: 003d8e     190 bytes  "getSelectedControl"
+Code: 003e4c    1372 bytes  "appHandleEvent"
+Code: 0043a8     182 bytes  "setGlobePreFix"
+Code: 00445e    1940 bytes  "frmContactEventHandler"
+Code: 004bf2      82 bytes  "showSendMessageStatus"
+Code: 004c44     356 bytes  "sendMessages"
+Code: 004da8     110 bytes  "updateScrollBar"
+Code: 004e16      90 bytes  "scrollContextField"
+Code: 004e70     182 bytes  "calculateAndDrawLengthAndCount"
+Code: 004f26     634 bytes  "frmMessageEventHandler"
+Code: 0051a0     350 bytes  "PilotMain"
+Code: 0052fe      56 bytes  "CLibLoad"                       File: "D:\Private\MW_WorkSpace\EasyPhone\Src\CLib.c"
+Code: 005336      40 bytes  "CLibRemove"
+Code: 00535e     182 bytes  "initCNLBGlobeParameter"
+Code: 005414     132 bytes  "constructPYKeyword"
+Code: 005498      44 bytes  "getPACEVersion"                 File: "C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\AccessorGlue.cp"
+Code: 0054c4     152 bytes  "MemGluePtrNew"                  File: "C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\MemGlue.cp"
+
+Data section below A5:      8 bytes
+Data section above A5:    168 bytes
+
+Uninitialized near data
+Data:     -4       4 bytes  "__CW_FEATURES_PTR"
+Data:     -8       4 bytes  "__global_destructor_chain"
+
+Initialized far data
+Data:     40     128 bytes  "__segtable__"
+
+-----
+
+PRC DB Name:       ËæÊÖPhone×é¼þ
+PRC DB Version:    1
+Type:              appl
+Creator:           EzPH
+Resource Count:    15
+Creation Time:     2007-03-27 @ 1225
+Modification Time: 2007-03-27 @ 1225
+Last Backup Time:  
+Attributes:         0x00000109
+                    dmHdrAttrResDB
+                    dmHdrAttrBackup
+                    dmHdrAttrHidden
+
+1:   tAIN           Application Name String            1000 (0x03e8)     14
+[ËæÊÖPhone×é¼þ]
+2:   tver           Application Version String         1000 (0x03e8)     12
+[v1.0 070327]
+3:   code           68K Object Code                    1 (0x0001)        21852
+4:   data           68K Global Data                    0 (0x0000)        107
+5:   code           68K Object Code                    0 (0x0000)        24
+6:   MBAR           Menu Bar                           1001 (0x03e9)     92
+7:   MBAR           Menu Bar                           1003 (0x03eb)     136
+8:   tFRM           Form                               1004 (0x03ec)     316
+9:   tFRM           Form                               1011 (0x03f3)     68
+10:   Talt           Alert                              1012 (0x03f4)     52
+11:   Talt           Alert                              1013 (0x03f5)     25
+12:   Talt           Alert                              1014 (0x03f6)     53
+13:   Tbmp           Bitmap                             1015 (0x03f7)     31208
+14:   Tbmp           Bitmap                             1016 (0x03f8)     9800
+15:   tSTR           String                             1017 (0x03f9)     1653
+[ËæÊÖPhone¡±ÊÇÒ»¿î¼¯ÁªÏµÈË¼ìË÷¡¢±à¼­¡¢²¦ºÅºÍ·¢ËÍ¶ÌÑ¶ÓÚÒ»ÌåµÄ¸...]

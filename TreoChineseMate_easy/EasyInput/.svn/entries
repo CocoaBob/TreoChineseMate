@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/EasyInput"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   committed-rev="1"
+   name="EasyInput.mcp"
+   text-time="2006-05-09T12:30:07.156250Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="690b72f33a1f251b8445a61910119fe2"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:12.359375Z"/>
+<entry
+   name="Release"
+   kind="dir"/>
+<entry
+   name="Debug"
+   kind="dir"/>
+<entry
+   name="Rsc"
+   kind="dir"/>
+<entry
+   name="Src"
+   kind="dir"/>
+<entry
+   name="EasyInput_Data"
+   kind="dir"/>
+<entry
+   committed-rev="1"
+   name="readme.txt"
+   text-time="2006-05-09T12:30:07.171875Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="8bbe62e6f0851120b87640f7c1a33e09"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:30:07.140625Z"/>
+</wc-entries>

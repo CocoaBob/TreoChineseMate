@@ -1,0 +1,26 @@
+/* pilrc generated file.  Do not edit!*/
+#define fldKeyN 1030
+#define lstResult 1029
+#define frmFSForm 1028
+#define errEnqueueKeyError 1027
+#define errAnyError 1026
+#define errDBOperateError 1025
+#define errMemError 1024
+#define errDBOpenError 1023
+#define fldThx 1022
+#define btnOK 1018
+#define AboutForm 1017
+#define menuAbout 1016
+#define menuHelp 1015
+#define fldName 1014
+#define fldLNKey 1013
+#define frmLastNameForm 1012
+#define lstSearch 1011
+#define trigLstSearch 1009
+#define btnBackToPref 1008
+#define cbRigourSearch 1007
+#define cbFastSearch 1006
+#define cbLastName 1005
+#define pbtnEnableCM 1003
+#define MenuCM 1002
+#define MainForm 1001

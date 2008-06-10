@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/ContactMate"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   name="Release"
+   kind="dir"/>
+<entry
+   committed-rev="2"
+   name="ChineseMate.mcp"
+   text-time="2006-05-09T14:48:00.187500Z"
+   committed-date="2006-05-09T15:07:54.025268Z"
+   checksum="1e3f5c5892be6c974d52533b2c6d9697"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:30:18.218750Z"
+   revision="2"/>
+<entry
+   name="Debug"
+   kind="dir"/>
+<entry
+   name="Rsc"
+   kind="dir"/>
+<entry
+   name="Src"
+   kind="dir"/>
+<entry
+   name="ChineseMate_Data"
+   kind="dir"/>
+</wc-entries>

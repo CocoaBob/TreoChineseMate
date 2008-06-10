@@ -1,0 +1,164 @@
+File:    1	"__RuntimeModule__"
+File:    2	"F:\PALM Develop\WorkSpace\ChineseMate\Src\AddressDB.c"
+File:    3	"F:\PALM Develop\WorkSpace\ChineseMate\Src\OLD_AddressDB.c"
+File:    4	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\Palm OS Support\CodeWarrior Libraries\Runtime\PalmOSRuntime_2i_A5.lib"
+File:    5	"CPlusLib68K.cp"
+File:    6	"Exception68K.cp"
+File:    7	"LongLong68K.c"
+File:    8	"MWRTTI.cp"
+File:    9	"NMWException.cp"
+File:   10	"NewMore.cp"
+File:   11	"New.cp"
+File:   12	"PalmOS_AbortExit.cpp"
+File:   13	"PalmOS_GlobalDestructors.c"
+File:   14	"PalmOS_setjmp.c"
+File:   15	"PalmOS_Startup.cpp"
+File:   16	"CWRuntime.c"
+File:   17	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C++\MSL_Palm_OS\Lib\68K\MSL_C++_PalmOS_2i_Dbg.lib"
+File:   18	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C++\MSL_Common\Src\ios.cpp"
+File:   19	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C++\MSL_Common\Src\iostream.cpp"
+File:   20	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C++\MSL_Common\Src\MSLstring.cpp"
+File:   21	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C++\MSL_Common\Src\mutex.cpp"
+File:   22	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C++\MSL_Common\Src\strstream.cpp"
+File:   23	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C++\MSL_Common\Src\complex.cpp"
+File:   24	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\float.c"
+File:   25	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\errno.c"
+File:   26	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\string.c"
+File:   27	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\qsort.c"
+File:   28	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\arith.c"
+File:   29	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\bsearch.c"
+File:   30	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\rand.c"
+File:   31	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\ctype.c"
+File:   32	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\CW for Palm OS Support\MSL\MSL_C\MSL_Common\Src\locale.c"
+File:   33	"F:\PALM Develop\WorkSpace\ChineseMate\Rsc\ChineseMate_Rsc.rcp"
+File:   34	"F:\PALM Develop\WorkSpace\ChineseMate\Src\ChineseMate.c"
+File:   35	"D:\DevelopmentTOOLs\Metrowerks\CodeWarrior\Palm OS Support\CodeWarrior Libraries\Palm OS Glue\PalmOSGlue.lib"
+File:   36	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\IntlGlue.cp"
+File:   37	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\TextMgr.c"
+File:   38	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\TxtGlue.cp"
+File:   39	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\TsmGlue.cp"
+File:   40	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\WinGlue.cp"
+File:   41	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\FntGlue.cp"
+File:   42	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\DateGlue.cp"
+File:   43	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\SysGlue.cp"
+File:   44	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\OmGlue.cp"
+File:   45	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\ResGlue.cp"
+File:   46	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\LmGlue.cp"
+File:   47	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\FrmGlue.cpp"
+File:   48	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\AccessorGlue.cp"
+File:   49	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\MemGlue.cp"
+File:   50	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\BmpGlue.cp"
+File:   51	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\TblGlue.cp"
+File:   52	"C:\p4_palmgate.palmsource.com1666_SVBCOMBEE\palm\SDK\main\Libraries\PalmOSGlue\Src\UIColorGlue.cp"
+
+Segment:   1   38334 bytes  "Segment 1"
+Code: 000004      12 bytes  "__DummyStartup__"               File: "__RuntimeModule__"
+Code: 000010      90 bytes  "AddrDBGetRecord"                File: "F:\PALM Develop\WorkSpace\ChineseMate\Src\AddressDB.c"
+Code: 00006a     892 bytes  "PrvAddrDBUnpack"
+Code: 0003e6      92 bytes  "OLD_PrvAddrDBUnpack"            File: "F:\PALM Develop\WorkSpace\ChineseMate\Src\OLD_AddressDB.c"
+Code: 000442      82 bytes  "OLD_AddrDBGetRecord"
+Code: 000494      12 bytes  "__dthandler__4MTWKFv"           File: "NMWException.cp"
+Code: 0004a0      12 bytes  "__duhandler__4MTWKFv"
+Code: 0004ac      16 bytes  "terminate__3stdFv"
+Code: 0004bc      24 bytes  "abort"                          File: "PalmOS_AbortExit.cpp"
+Code: 0004d4      42 bytes  "__destroy_global_chain"         File: "PalmOS_GlobalDestructors.c"
+Code: 0004fe      14 bytes  "setjmp"                         File: "PalmOS_setjmp.c"
+Code: 00050c      18 bytes  "longjmp"
+Code: 00051e     154 bytes  "__Relocate____4MTWKFPScPScUl"   File: "PalmOS_Startup.cpp"
+Code: 0005b8     314 bytes  "__Startup__"
+Code: 0006f2       8 bytes  "__PreInit__"
+Code: 0006fa       8 bytes  "__InitCode__"
+Code: 000702     132 bytes  "__SkipToXREFs____4MTWKFPSc"
+Code: 000786     128 bytes  "__PatchV10Devices____4MTWKFP14SysAppInfoType"
+Code: 000806     234 bytes  "__LoadAndRelocate____4MTWKFUcP7_opaque"
+Code: 0008f0      32 bytes  "__lmul__"                       File: "CWRuntime.c"
+Code: 000910      76 bytes  "__ldivu__"
+Code: 00095c     918 bytes  "GetCallerID"                    File: "F:\PALM Develop\WorkSpace\ChineseMate\Src\ChineseMate.c"
+Code: 000cf2     230 bytes  "DialNum"
+Code: 000dd8     252 bytes  "GetFirstChar"
+Code: 000ed4     252 bytes  "OLD_GetFirstChar"
+Code: 000fd0     150 bytes  "GetFirstName"
+Code: 001066     150 bytes  "OLD_GetFirstName"
+Code: 0010fc     238 bytes  "isMultiPY"
+Code: 0011ea      56 bytes  "GetFirstPY"
+Code: 001222     602 bytes  "MatchPY"
+Code: 00147c     254 bytes  "StrDigitCopy"
+Code: 00157a     248 bytes  "GetPhnLabel"
+Code: 001672     372 bytes  "GetMatchedRecV2"
+Code: 0017e6     372 bytes  "OLD_GetMatchedRecV2"
+Code: 00195a      64 bytes  "mRecPtrReset"
+Code: 00199a     420 bytes  "dpLstGetSelectionText"
+Code: 001b3e     420 bytes  "OLD_dpLstGetSelectionText"
+Code: 001ce2     246 bytes  "dpDrawList"
+Code: 001dd8    7486 bytes  "pySearchHandler"
+Code: 003b16     102 bytes  "dpDrawStatusIcon"
+Code: 003b7c     232 bytes  "DrawDialpad"
+Code: 003c64     390 bytes  "DialpadHandler"
+Code: 003dea     130 bytes  "fastInputContactSearchEventHandler"
+Code: 003e6c    4796 bytes  "fastInputEventHandler"
+Code: 005128    3168 bytes  "FirstNameHandler"
+Code: 005d88      46 bytes  "GetCurLine"
+Code: 005db6      36 bytes  "GetMaxLine"
+Code: 005dda    5572 bytes  "LastNameHandler"
+Code: 00739e     322 bytes  "AboutBox"
+Code: 0074e0      70 bytes  "MainFormDoCommand"
+Code: 007526    2678 bytes  "MainFormHandleEvent"
+Code: 007f9c      80 bytes  "AppHandleEvent"
+Code: 007fec    1586 bytes  "AppEventLoop"
+Code: 00861e    4000 bytes  "PilotMain"
+
+Data section below A5:      8 bytes
+Data section above A5:    168 bytes
+
+Uninitialized near data
+Data:     -4       4 bytes  "__CW_FEATURES_PTR"
+Data:     -8       4 bytes  "__global_destructor_chain"
+
+Initialized far data
+Data:     40     128 bytes  "__segtable__"
+
+-----
+
+PRC DB Name:       ChineseMate
+PRC DB Version:    1
+Type:              panl
+Creator:           REiC
+Resource Count:    28
+Creation Time:     2006-01-26 @ 0912
+Modification Time: 2006-01-26 @ 0912
+Last Backup Time:  
+Attributes:         0x00000009
+                    dmHdrAttrResDB
+                    dmHdrAttrBackup
+
+1:   tAIN           Application Name String            1000 (0x03e8)     12
+[ChineseMate]
+2:   tver           Application Version String         1000 (0x03e8)     4
+[1.0]
+3:   code           68K Object Code                    1 (0x0001)        38334
+4:   data           68K Global Data                    0 (0x0000)        113
+5:   code           68K Object Code                    0 (0x0000)        24
+6:   tFRM           Form                               1001 (0x03e9)     988
+7:   fnav           Navigation                         1001 (0x03e9)     156
+8:   tFRM           Form                               1026 (0x0402)     160
+9:   MBAR           Menu Bar                           1002 (0x03ea)     97
+10:   tFRM           Form                               1029 (0x0405)     298
+11:   Talt           Alert                              1035 (0x040b)     44
+12:   Talt           Alert                              1036 (0x040c)     54
+13:   Talt           Alert                              1037 (0x040d)     44
+14:   Talt           Alert                              1038 (0x040e)     38
+15:   tFRM           Form                               1039 (0x040f)     250
+16:   fnav           Navigation                         1039 (0x040f)     28
+17:   Talt           Alert                              1044 (0x0414)     36
+18:   tFRM           Form                               1045 (0x0415)     158
+19:   fnav           Navigation                         1045 (0x0415)     28
+20:   tFRM           Form                               1048 (0x0418)     158
+21:   fnav           Navigation                         1048 (0x0418)     28
+22:   tFRM           Form                               1051 (0x041b)     184
+23:   fnav           Navigation                         1051 (0x041b)     28
+24:   Tbmp           Bitmap                             1055 (0x041f)     35488
+25:   Tbmp           Bitmap                             1056 (0x0420)     3742
+26:   Tbmp           Bitmap                             1057 (0x0421)     856
+27:   Tbmp           Bitmap                             1058 (0x0422)     216
+28:   tSTR           String                             1000 (0x03e8)     2370
+[-帮助文档-_*注意：更改任何设置后，应该把中文伴侣关闭后再打开...]

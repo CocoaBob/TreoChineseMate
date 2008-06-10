@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/ContactMate/Rsc"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   committed-rev="2"
+   name="ChineseMate_Rsc.rcp"
+   text-time="2006-05-09T14:48:12.000000Z"
+   committed-date="2006-05-09T15:07:54.025268Z"
+   checksum="26bb1d0b52bde6caabfbc98b1cb474f0"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:30:41.156250Z"
+   revision="2"/>
+<entry
+   committed-rev="1"
+   name="ChineseMate_Rsc.h"
+   text-time="2006-05-09T12:30:41.546875Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="cb1f89023e403b066d58cde9cc6af587"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:30:41.531250Z"/>
+</wc-entries>

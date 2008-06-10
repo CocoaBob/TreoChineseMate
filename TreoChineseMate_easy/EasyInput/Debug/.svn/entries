@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/EasyInput/Debug"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   committed-rev="1"
+   name="EasyInput.prc.MAP"
+   text-time="2006-05-09T12:26:29.734375Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="ebd0ea935850cd27d1640138ca2a0de9"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:19.796875Z"/>
+<entry
+   committed-rev="1"
+   name="EasyInput.prc"
+   text-time="2006-05-09T12:26:29.750000Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="7815360a6237805f6ba6e4dcc04b5f11"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:21.328125Z"/>
+<entry
+   committed-rev="1"
+   name="EasyInput.prc.psym"
+   text-time="2006-05-09T12:26:29.750000Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="a609659af6802cc69ff9b8262ba981c7"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:29.718750Z"/>
+</wc-entries>

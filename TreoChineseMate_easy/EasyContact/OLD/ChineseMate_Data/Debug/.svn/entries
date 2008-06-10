@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/ContactMate/ChineseMate_Data/Debug"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   name="ObjectCode"
+   kind="dir"/>
+<entry
+   committed-rev="2"
+   name="TargetDataWindows.tdt"
+   text-time="2006-05-09T14:48:47.500000Z"
+   committed-date="2006-05-09T15:07:54.025268Z"
+   checksum="fb528f91b19cfbc88ec1e30cbe789eaf"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:33:38.531250Z"
+   revision="2"/>
+</wc-entries>

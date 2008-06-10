@@ -1,0 +1,102 @@
+GENERATEHEADER "ChineseMate_Rsc.h"
+RESETAUTOID 1000
+
+
+
+FORM ID MainForm  AT ( 0 0 160 160 )
+NOFRAME MENUID MenuCM
+BEGIN
+	TITLE "通讯录伴侣"
+	PUSHBUTTON  "启动" ID pbtnEnableCM  AT (25 27 110 40) GROUP 0
+	LABEL "检索方式" AUTOID AT (22 74)
+	CHECKBOX "百家姓" ID cbLastName  AT (25 87 70 12)
+	CHECKBOX "快速检索" ID cbFastSearch  AT (25 100 73 12)
+	CHECKBOX "精确匹配" ID cbRigourSearch  AT (35 126 67 12)
+	BUTTON "OK" ID btnBackToPref  AT (99 145 35 12)
+	POPUPTRIGGER "名(First Name)" ID trigLstSearch  AT (57 113 85 12) RIGHTANCHOR
+	LABEL "检索" AUTOID AT (35 113)
+	LIST "名(First Name)" "姓(Last Name)" "公司(Company)" ID lstSearch  AT (57 113 85 35) VISIBLEITEMS 3 NONUSABLE 
+
+END
+
+FORM ID frmLastNameForm   AT ( 20 52 120 55 )
+MODAL
+BEGIN
+	FIELD ID fldLNKey  AT (4 2 12 14) MAXCHARS 3  FONT 7 NONEDITABLE 
+	FIELD ID fldName  AT (20 2 100 50) MAXCHARS 255  MULTIPLELINES NONEDITABLE 
+END
+
+MENU ID MenuCM 
+BEGIN
+	PULLDOWN "关于"
+	BEGIN
+		MENUITEM "帮助" ID menuHelp
+		MENUITEM "关于 通讯录伴侣" ID menuAbout  
+	END
+END                                   
+
+FORM ID AboutForm  AT ( 2 2 156 156 )
+MODAL
+BEGIN
+	TITLE "关于 Treo中文伴侣"
+	BUTTON "确定" ID btnOK  AT (60 137 40 12)
+	LABEL "Treo中文伴侣" AUTOID AT (45 22) FONT 2
+	LABEL "版本 1.54，2006-5-9" AUTOID AT (10 42)
+	LABEL "REi.Laputa 版权所有" AUTOID AT (10 62)
+	FIELD ID fldThx   AT (10 75 140 55) MAXCHARS 255 EDITABLE UNDERLINED MULTIPLELINES
+END
+
+ALERT ID errDBOpenError 
+ERROR
+BEGIN
+     TITLE "数据库错误"
+     MESSAGE "打开数据库失败"
+     BUTTONS "OK" "Cancel"
+END
+
+ALERT ID errMemError 
+ERROR
+BEGIN
+     TITLE "内存错误"
+     MESSAGE "分配内存失败（内存不足？）"
+     BUTTONS "OK" "Cancel"
+END
+
+ALERT ID errDBOperateError 
+ERROR
+BEGIN
+     TITLE "数据库错误"
+     MESSAGE "数据库操作失败"
+     BUTTONS "OK" "Cancel"
+END
+
+ALERT ID errAnyError 
+ERROR
+BEGIN
+     TITLE "程序错误"
+     MESSAGE "运行时错误"
+     BUTTONS "OK" "Cancel"
+END
+
+ALERT ID errEnqueueKeyError  
+ERROR
+BEGIN
+     TITLE "错误"
+     MESSAGE "姓氏返回错误"
+     BUTTONS "OK" "Cancel"
+END
+
+FORM ID frmFSForm  AT ( 6 55 64 97 )
+MODAL
+BEGIN
+	 LIST ""   ID lstResult  AT (2 2 60 79) VISIBLEITEMS 7
+	 FIELD ID fldKeyN  AT (2 82 34 14) MAXCHARS 6 NONEDITABLE NONUSABLE 
+END
+
+NAVIGATION ID 1028
+INITIALSTATE 0x00000003
+NAVIGATIONMAP
+ROW 1029
+END
+
+STRING ID 1000 "-帮助文档-\n\n通讯录伴侣支持“百家姓”和“名字查找”两种方式。\n启动后，软件会伴随系统内置的通讯录启动。在“百家姓”模式下，按英文字母会打开对应拼音首字母的第一个文字的列表，按“.”键打开英文列表。用五向键选择文字，按“中间键”或“空格”返回。\n在“快速检索”模式下，连续按入英文字母，会自动找出匹配拼音首字母的记录，用上下键选择希望的记录，用Opt键和左Shift键进行翻页，按“中间键”或“空格”返回，按“回车”则返回按入的英文。\n由于内置通讯录本身的限制，“快速检索”只能在“姓”、“名”或“公司”三个字段中检索其中的一个，你可以根据自己的通讯录的情况进行选择：如果你按照“姓、名”的标准方式保存联系人，那么检索“名”是比较好的选择；如果你把联系人的姓名全部保存在“姓”或者“名”字段中，则应该选择检索对应的字段。\n激活“精确匹配”后，快速检索联系人时将从第一个文字开始逐项匹配。\n*注意：通讯录伴侣暂时无法识别内置的通讯录的当前分类，因此，最好把分类设在ALL*"

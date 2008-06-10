@@ -1,0 +1,95 @@
+/*
+ * EasyInput.h
+ *
+ * header file for EasyInput
+ *
+ * This wizard-generated code is based on code adapted from the
+ * stationery files distributed as part of the Palm OS SDK 4.0.
+ *
+ * Copyright (c) 1999-2000 Palm, Inc. or its subsidiaries.
+ * All rights reserved.
+ */
+ 
+#ifndef EASYINPUT_H_
+#define EASYINPUT_H_
+
+/*********************************************************************
+ * Internal Structures
+ *********************************************************************/
+typedef struct
+{
+	LocalID		dbID;
+	UInt8		addType;
+	Boolean		fiEnabled;
+	WChar		fiKey;
+	Boolean		rigourSearch;
+	
+	Boolean		nativeSeach;
+	Boolean		dpEnabled;
+	UInt8		DALaunch;
+}ChineseMatePref;
+
+typedef struct
+{
+	UInt8		actionCode;
+	Char		* data;
+}actionType;
+
+typedef struct
+{
+	UInt16		recIndex;
+	UInt8		phnLabel;	
+	void		*next;
+}MRecordType;
+
+typedef struct
+{
+	DmOpenRef	*dbRef;
+	MRecordType *mRec;
+	UInt16		mRecC;
+	Char		*nameBuf;
+	Boolean		(*lstGetSelTextPtr)(void * lparam, Int16 itemNum, UInt8 *phnType);
+	Boolean		dpMode;
+	ListType	*curLstP;
+}dpDrawListParam;
+
+/*********************************************************************
+ * Global variables
+ *********************************************************************/
+
+
+/*********************************************************************
+ * Internal Constants
+ *********************************************************************/
+
+#define appFileCreator			'eIPT'
+#define appName					"EasyInput"
+#define appVersionNum			0x01
+#define appPrefID				0x00
+#define appPrefVersionNum		0x01
+
+#define NoApp					0xFF
+#define ContactsApp				0x00
+#define PhoneApp				0x01
+#define MsgApp					0x02
+
+#define noAction				0x00
+#define actionDial				0x01
+#define actionAddContact		0x02
+#define actionSendMsg			0x03
+#define actionSendEmail			0x04
+
+#define bgColor					0x00
+#define curColor				0x01
+#define defObjFrame				0x02
+#define defObjFill				0x03
+#define defDiagFrame			0x04
+#define defDiagFill				0x05
+
+#define daNoAction				0x00
+#define daDialPad				0x01
+#define daEasyInput				0x02
+
+#define ByteSwap16(n) ( ((((unsigned int) n) << 8) & 0xFF00) | ((((unsigned int) n) >> 8) & 0x00FF) )
+
+#endif /* EASYINPUT_H_ */

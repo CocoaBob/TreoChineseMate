@@ -1,0 +1,2556 @@
+/*
+ * EasyInput.c
+ *
+ * main file for EasyInput
+ *
+ * This wizard-generated code is based on code adapted from the
+ * stationery files distributed as part of the Palm OS SDK 4.0.
+ *
+ * Copyright (c) 1999-2000 Palm, Inc. or its subsidiaries.
+ * All rights reserved.
+ */
+ 
+#include <PalmOS.h>
+#include <Helper.h>
+#include <HelperServiceClass.h>
+#include <68K\Hs.h>
+#include <common\system\palmOneNavigator.h>
+#include <common\system\HsKeyCodes.h>
+
+#include "EasyInput.h"
+#include "EasyInput_Rsc.h"
+#include "AddrDefines.h"
+#include "AddressDB.h"
+#include "OLD_AddrDefines.h"
+#include "OLD_AddressDB.h"
+
+static UInt16 isMultiPY(WChar gbkchr, Char *pychr, UInt32 *base, DmOpenRef *pydbRef)
+{
+	MemHandle	recordHandle;
+	MemPtr		recordPtr;
+	UInt16		index;
+
+	if (gbkchr <= 128) //英文
+	{
+		if (gbkchr >= 97 && gbkchr <= 122)
+		{
+			(*pychr) = (Char)(0x00FF & (gbkchr - 32));
+		}
+		else
+		{
+			(*pychr) = (Char)(0x00FF & gbkchr);
+		}
+		return 0xFFFF;
+	}
+	recordHandle = DmQueryRecord(pydbRef, 0);
+	recordPtr = MemHandleLock(recordHandle);
+	index = ((UInt16 *)recordPtr)[gbkchr - 33088];
+	if (index >= 0xFF00)
+	{
+		(*pychr) = (Char)(0x00FF & index);
+		MemHandleUnlock(recordHandle);
+		return 0xFFFF;
+	}
+	else //多音字
+	{
+		MemHandleUnlock(recordHandle);
+		recordHandle = DmQueryRecord(pydbRef, 1);
+		recordPtr = MemHandleLock(recordHandle);
+		(*pychr) = ((Char *)recordPtr)[index];
+		(*base) = (*base) * ((UInt32)StrLen((Char *)recordPtr + index));
+		MemHandleUnlock(recordHandle);
+		return index;
+	}
+}
+
+static Boolean MatchPY(Char *gbkStr, Char *pyStr, Char *keyStr, UInt16 *sampleStr, DmOpenRef *dbR)
+{
+	UInt16		i = 0;
+	UInt16		j;
+	UInt16		k;
+	WChar		chrBuf;
+	Char		**mStr;
+	MemHandle	recH;
+	Char		*recP;
+	UInt16		mlen;
+	UInt16		gbklen = 0;
+	UInt32		base = 1;
+	UInt16		g;
+	UInt16		l;
+	UInt16		n;
+	UInt16		o;
+	Boolean		matched = false;
+	//---------------
+	//UInt16 tmp;
+	
+	while (gbkStr[i])
+	{
+		i += TxtGetNextChar(gbkStr, i, &chrBuf);
+		sampleStr[gbklen] = isMultiPY(chrBuf, &pyStr[gbklen], &base, dbR);
+		gbklen ++;
+	}
+	if (base == 1) //没有多音字
+	{
+		recP = StrStr(pyStr, keyStr);
+		if (recP)
+		{
+			matched = true;
+		}
+	}
+	else
+	{
+		//分配内存
+		mStr = MemPtrNew((base << 2));
+		j = gbklen + 1;
+		for (i = 0; i < base; i ++)
+		{
+			mStr[i] = MemPtrNew(j);
+			MemSet(mStr[i], j, 0x00);
+		}
+		g = base;
+		//构造字符串
+		for (i = 0; i < gbklen; i ++)
+		{
+			//m = i << 1;
+			if (sampleStr[/*m*/ i] != 0xFFFF) //多音字
+			{
+				recH = DmQueryRecord(dbR, 1);
+				recP = ((Char *)MemHandleLock(recH)) + sampleStr[/*m*/ i];
+				mlen = StrLen(recP); //获取长度，即字母的个数
+				g = g / mlen; //每个字母的重复次数
+				k = 0;
+				l = 0;
+				n = base / (g * mlen); //段数
+				for (o = 0; o < n; o ++)
+				{
+					for (j = 0; j < mlen; j ++) //遍历每个字母
+					{
+						for (k = 0; k < g; k ++)
+						{
+							mStr[l][i] = recP[j];
+							l ++;
+						}
+					}
+				}
+				MemHandleUnlock(recH);
+			}
+			else
+			{
+				for (j = 0; j < base; j ++)
+				{
+					mStr[j][i] = pyStr[i];
+				}
+			}
+		}
+		//比较
+		for (i = 0; i < base; i ++)
+		{
+			recP = StrStr(mStr[i], keyStr);
+			if (recP)
+			{
+				matched = true;
+			}
+			MemPtrFree(mStr[i]);
+		}
+		MemPtrFree(mStr);
+	}
+	return matched;
+}
+
+static UInt16 StrDigitCopy(Char * dst, Char * src)
+{
+	UInt16 dstLen = 0;
+	
+	while (*src)
+	{
+		switch (*src)
+		{
+			case 0x30:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x31:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x32:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x33:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x34:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x35:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x36:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x37:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x38:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x39:
+				dst[dstLen] = *src;
+				dstLen ++;
+				break;
+			case 0x2B: //+ => 00
+				dst[dstLen] = '+';
+				dstLen ++;
+				//dst[dstLen] = '0';
+				//dstLen ++;
+				break;
+		}
+		src ++;
+	}
+	dst[dstLen ++] = 0x00;
+
+	return dstLen;
+}
+
+static void GetPhnLabel(AddressPhoneLabels phnEnum, Char * label)
+{
+	const Char * work = " (W)";
+	const Char * home = " (H)";
+	const Char * fax = " (F)";
+	const Char * other = " (O)";
+	const Char * email = " (E)";
+	const Char * main = " (M)";
+	const Char * pager = " (P)";
+	const Char * mobile = " (M)";
+	
+	switch (phnEnum)
+	{
+		case workLabel:
+			StrCat(label, work);
+			break;
+		case homeLabel:
+			StrCat(label, home);
+			break;
+		case faxLabel:
+			StrCat(label, fax);
+			break;
+		case otherLabel:
+			StrCat(label, other);
+			break;
+		case emailLabel:
+			StrCat(label, email);
+			break;
+		case mainLabel:
+			StrCat(label, main);
+			break;
+		case pagerLabel:
+			StrCat(label, pager);
+			break;
+		case mobileLabel:
+			StrCat(label, mobile);
+			break;
+	}
+}
+
+static MRecordType *GetMatchedRecV2(DmOpenRef *dbRef, DmOpenRef *pydbRef, UInt16 recI, Char *keyStr, Char *pyBuf, Char *nameBuf, UInt16 *sStr, MRecordType *mRec, UInt16 *mRecC, ChineseMatePref *cf)
+{
+	MemHandle			recH;
+	AddrDBRecordType	addrRecord;
+	//Char				*tmpPtr;
+	MRecordType			*newItem;
+	UInt32				phnSlot = 4;
+	UInt16				i = 0;
+	UInt16				j = 0;
+	
+	//获取通讯记录
+	AddrDBGetRecord(dbRef, recI, &addrRecord, &recH);
+	if (recH)
+	{
+		if (addrRecord.fields[name])
+		{
+			StrCopy(nameBuf, addrRecord.fields[name]);
+		}
+		if (addrRecord.fields[firstName])
+		{
+			StrCat(nameBuf, addrRecord.fields[firstName]);
+		}
+		if (*nameBuf == 0x00)
+		{
+			if (addrRecord.fields[company])
+			{
+				StrCopy(nameBuf, addrRecord.fields[company]);
+			}
+		}
+		//进行比对
+		if (StrLen(nameBuf) > 0)
+		{
+			if (cf->rigourSearch) //不需要检测下标是否越界，因为nameBuf至少有100个字节，而keyStr最多6个字节
+			{
+				while(nameBuf[i] && keyStr[j])
+				{
+					i += TxtGetNextChar(nameBuf, i, NULL);
+					j ++;
+				}
+				nameBuf[i] = 0x00;
+			}
+			/*MatchPY(nameBuf, pyBuf, keyStr, sStr, pydbRef);
+			GBK2PY(nameBuf, pyBuf, keyStr, pydbRef);
+			tmpPtr = NULL;
+			tmpPtr = StrStr(pyBuf, keyStr);*/
+			if (MatchPY(nameBuf, pyBuf, keyStr, sStr, pydbRef)) //匹配
+			{
+				if (*mRecC > 0)
+				{
+					newItem = MemPtrNew(7);
+					mRec->next = (void *)newItem;
+					mRec = newItem;
+				}
+				mRec->recIndex = recI; //当前节点对应的联系人记录
+				mRec->phnLabel = 0; //姓名节点
+				mRec->next = NULL; //终止标记
+				(*mRecC) ++; //链表计数+1
+				for (phnSlot = 4; phnSlot <= 10; phnSlot ++)
+				{
+					if (addrRecord.fields[phnSlot]) //有电话，新增节点储存
+					{
+						newItem = MemPtrNew(7); //创建新节点（UInt16: 2 Bytes; UInt8: 1 Bytes; Ptr: 4 Bytes; Total: 7Bytes）
+						mRec->next = (void *)newItem;
+						mRec = newItem; //指向新节点
+						mRec->recIndex = recI; //仍旧是当前记录
+						mRec->phnLabel = phnSlot; //当前电话
+						mRec->next = NULL; //终止标记
+						(*mRecC) ++; //链表计数+1
+					}
+				}
+			}
+		}
+		
+		//释放记录
+		MemHandleUnlock(recH);
+	}
+	return mRec;
+}
+
+static MRecordType *OLD_GetMatchedRecV2(DmOpenRef *dbRef, DmOpenRef *pydbRef, UInt16 recI, Char *keyStr, Char *pyBuf, Char *nameBuf, UInt16 *sStr, MRecordType *mRec, UInt16 *mRecC, ChineseMatePref *cf)
+{
+	MemHandle				recH;
+	OLD_AddrDBRecordType	addrRecord;
+	//Char					* tmpPtr;
+	MRecordType				*newItem;
+	UInt32					phnSlot = 3;
+	UInt16					i = 0;
+	UInt16					j = 0;
+	
+	//获取通讯记录
+	OLD_AddrDBGetRecord(dbRef, recI, &addrRecord, &recH);
+	if (recH)
+	{
+		if (addrRecord.fields[OLD_name])
+		{
+			StrCopy(nameBuf, addrRecord.fields[OLD_name]);
+		}
+		if (addrRecord.fields[OLD_firstName])
+		{
+			StrCat(nameBuf, addrRecord.fields[OLD_firstName]);
+		}
+		if (*nameBuf == 0x00)
+		{
+			if (addrRecord.fields[OLD_company])
+			{
+				StrCopy(nameBuf, addrRecord.fields[OLD_company]);
+			}
+		}
+		//进行比对
+		if (StrLen(nameBuf) > 0)
+		{
+			if (cf->rigourSearch) //不需要检测下标是否越界，因为nameBuf至少有100个字节，而keyStr最多6个字节
+			{
+				while(nameBuf[i] && keyStr[j])
+				{
+					i += TxtGetNextChar(nameBuf, i, NULL);
+					j ++;
+				}
+				nameBuf[i] = 0x00;
+			}
+			/*MatchPY(nameBuf, pyBuf, keyStr, sStr, pydbRef);
+			GBK2PY(nameBuf, pyBuf, keyStr, pydbRef);
+			tmpPtr = NULL;
+			tmpPtr = StrStr(pyBuf, keyStr);*/
+			if (MatchPY(nameBuf, pyBuf, keyStr, sStr, pydbRef)) //匹配
+			{
+				if (*mRecC > 0)
+				{
+					newItem = MemPtrNew(7);
+					mRec->next = (void *)newItem;
+					mRec = newItem;
+				}
+				mRec->recIndex = recI; //当前节点对应的联系人记录
+				mRec->phnLabel = 0; //姓名节点
+				mRec->next = NULL; //终止标记
+				(*mRecC) ++; //链表计数+1
+				for (phnSlot = 3; phnSlot <= 7; phnSlot ++)
+				{
+					if (addrRecord.fields[phnSlot]) //有电话，新增节点储存
+					{
+						newItem = MemPtrNew(7); //创建新节点（UInt16: 2 Bytes; UInt8: 1 Bytes; Ptr: 4 Bytes; Total: 7Bytes）
+						mRec->next = (void *)newItem;
+						mRec = newItem; //指向新节点
+						mRec->recIndex = recI; //仍旧是当前记录
+						mRec->phnLabel = phnSlot; //当前电话
+						mRec->next = NULL; //终止标记
+						(*mRecC) ++; //链表计数+1
+					}
+				}
+			}
+		}
+		
+		//释放记录
+		MemHandleUnlock(recH);
+	}
+	return mRec;
+}
+
+static void mRecPtrReset(MRecordType *item)
+{
+	MRecordType *freeItem;
+	MRecordType *curItem;
+	
+	if (item->next != NULL)
+	{
+		curItem = (MRecordType *)item->next;
+		while (curItem->next != NULL)
+		{
+			freeItem = curItem;
+			curItem = (MRecordType *)curItem->next;
+			MemPtrFree(freeItem);
+		}
+		MemPtrFree(curItem);
+	}
+	item->next = NULL;
+}
+
+static Boolean dpLstGetSelectionText(void * lparam, Int16 itemNum, UInt8 *phnType)
+{
+	MemHandle			recH;
+	AddrDBRecordType	addrRecord;
+	Int16				i;
+	dpDrawListParam     *param;
+	MRecordType			*curItem;
+	const Char			*noname = "未命名";
+	//AddressPhoneLabels	phnType = workLabel;
+	
+	param = (dpDrawListParam *)lparam;
+	i = 0;
+	
+	curItem = param->mRec; //第一个节点
+	while (i < itemNum && curItem->next != NULL) //移动到对应节点
+	{
+		curItem = (MRecordType *)curItem->next;
+		i ++;
+	}
+	AddrDBGetRecord(param->dbRef, curItem->recIndex, &addrRecord, &recH);
+	if (curItem->phnLabel == 0) //姓名
+	{
+		param->nameBuf[0] = 0x00;
+		if (addrRecord.fields[name])
+		{
+			StrCopy(param->nameBuf, addrRecord.fields[name]);
+		}
+		if (addrRecord.fields[firstName])
+		{
+			StrCat(param->nameBuf, addrRecord.fields[firstName]);
+		}
+		if (param->nameBuf[0] == 0x00)
+		{
+			if (addrRecord.fields[company])
+			{
+				StrCopy(param->nameBuf, addrRecord.fields[company]);
+			}
+		}
+		if (param->nameBuf[0] == 0x00)
+		{
+			StrCopy(param->nameBuf, noname);
+		}
+		if (! param->dpMode && curItem->next != NULL)
+		{
+			UInt16 curRec;
+			
+			curRec = curItem->recIndex;
+			curItem = (MRecordType *)curItem->next;
+			while(curItem->recIndex == curRec)
+			{
+				StrCat(param->nameBuf, "\n");
+				StrCat(param->nameBuf, addrRecord.fields[curItem->phnLabel]);
+				*phnType = (UInt8)GetPhoneLabel(&addrRecord, curItem->phnLabel);
+				GetPhnLabel((AddressPhoneLabels)*phnType, param->nameBuf);
+				if (curItem->next != NULL)
+				{
+					curItem = (MRecordType *)curItem->next;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		MemHandleUnlock(recH);
+		return true;
+	}
+	else //电话
+	{
+		StrCopy(param->nameBuf, addrRecord.fields[curItem->phnLabel]);
+		if (param->dpMode)
+		{
+			*phnType = (UInt8)GetPhoneLabel(&addrRecord, curItem->phnLabel);
+			GetPhnLabel((AddressPhoneLabels)*phnType, param->nameBuf);
+		}
+		MemHandleUnlock(recH);
+		return false;
+	}
+}
+
+static Boolean OLD_dpLstGetSelectionText(void * lparam, Int16 itemNum, UInt8 *phnType)
+{
+	MemHandle				recH;
+	OLD_AddrDBRecordType	addrRecord;
+	Int16					i;
+	dpDrawListParam 	   	*param;
+	MRecordType				*curItem;
+	const Char				*noname = "未命名";
+	//OLD_AddressPhoneLabels	phnType = OLD_workLabel;
+	
+	param = (dpDrawListParam *)lparam;
+	i = 0;
+	
+	curItem = param->mRec; //第一个节点
+	while (i < itemNum && curItem->next != NULL) //移动到对应节点
+	{
+		curItem = (MRecordType *)curItem->next;
+		i ++;
+	}
+	OLD_AddrDBGetRecord(param->dbRef, curItem->recIndex, &addrRecord, &recH);
+	if (curItem->phnLabel == 0) //姓名
+	{
+		param->nameBuf[0] = 0x00;
+		if (addrRecord.fields[OLD_name])
+		{
+			StrCopy(param->nameBuf, addrRecord.fields[OLD_name]);
+		}
+		if (addrRecord.fields[OLD_firstName])
+		{
+			StrCat(param->nameBuf, addrRecord.fields[OLD_firstName]);
+		}
+		if (param->nameBuf[0] == 0x00)
+		{
+			if (addrRecord.fields[OLD_company])
+			{
+				StrCopy(param->nameBuf, addrRecord.fields[OLD_company]);
+			}
+		}
+		if (param->nameBuf[0] == 0x00)
+		{
+			StrCopy(param->nameBuf, noname);
+		}
+		if (! param->dpMode && curItem->next != NULL)
+		{
+			UInt16 curRec;
+			
+			curRec = curItem->recIndex;
+			curItem = (MRecordType *)curItem->next;
+			while(curItem->recIndex == curRec)
+			{
+				StrCat(param->nameBuf, "\n");
+				StrCat(param->nameBuf, addrRecord.fields[curItem->phnLabel]);
+				*phnType = (UInt8)OLD_GetPhoneLabel(&addrRecord, curItem->phnLabel);
+				GetPhnLabel((OLD_AddressPhoneLabels)*phnType, param->nameBuf);
+				if (curItem->next != NULL)
+				{
+					curItem = (MRecordType *)curItem->next;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		MemHandleUnlock(recH);
+		return true;
+	}
+	else //电话
+	{
+		StrCopy(param->nameBuf, addrRecord.fields[curItem->phnLabel]);
+		if (param->dpMode)
+		{
+			*phnType = (UInt8)OLD_GetPhoneLabel(&addrRecord, curItem->phnLabel);
+			GetPhnLabel((OLD_AddressPhoneLabels)*phnType, param->nameBuf);
+		}
+		MemHandleUnlock(recH);
+		return false;
+	}
+}
+
+static void dpDrawList (Int16 itemNum, RectangleType *bounds, Char **itemsText)
+{
+	dpDrawListParam		*param;
+	UInt8				phnType;
+	RGBColorType		newBGColor;
+	
+	param = (dpDrawListParam *)(*itemsText);
+	if ((*(param->lstGetSelTextPtr))((void *)param, itemNum, &phnType)) //姓名
+	{
+		if (itemNum != LstGetSelection(param->curLstP))
+		{
+			newBGColor.r = 222;
+			newBGColor.g = 222;
+			newBGColor.b = 222;
+			WinPushDrawState();
+			WinSetForeColorRGB(&newBGColor, NULL);
+			WinDrawRectangle(bounds, 0);
+			WinPopDrawState();
+			WinPushDrawState();
+			WinSetBackColorRGB(&newBGColor, NULL);
+			WinDrawTruncChars(param->nameBuf, (Int16)StrLen(param->nameBuf), bounds->topLeft.x, bounds->topLeft.y, bounds->extent.x);
+			WinPopDrawState();
+		}
+		else
+		{
+			WinDrawTruncChars(param->nameBuf, (Int16)StrLen(param->nameBuf), bounds->topLeft.x, bounds->topLeft.y, bounds->extent.x);
+		}
+	}
+	else //号码
+	{
+		WinDrawTruncChars(param->nameBuf, (Int16)StrLen(param->nameBuf), bounds->topLeft.x, bounds->topLeft.y, bounds->extent.x);
+	}
+	param->nameBuf[0] = 0x00;
+}
+
+static UInt8 pySearchHandler(ChineseMatePref * cf, Char *phnNum, Boolean dpMode, FormType *frmP,
+								FieldType *fldPhnNumPtr, ListType *lstContactItemPtr,
+								RGBColorType **color, Coord lookupStrX, Coord lookupStrY)
+{
+	EventType		event;
+	Boolean			exit = false;
+	Boolean			keyHandled = false;
+	Char			*fldLookupStrPtr;
+	MemHandle		fldTextHandle;
+	Char			*fldTextPtr;
+	UInt16			lookupStrLen = 0;
+	UInt16			phnStrLen = 0;
+	Boolean			rounded = false;
+	DmOpenRef		*dbRef;
+	DmOpenRef		*pydbRef;
+	UInt32			bufSize;
+	Char			*addrFullName;
+	UInt16			*sStr;
+	Char			*PYStr;
+	Char			*phnLabel;
+	UInt8			phnType;
+	UInt32			totalRec;
+	dpDrawListParam	*lparam;
+	MRecordType		*curItem;
+	UInt16			i;
+	Int16			lstSel;
+	UInt32			addrCreator;
+	Char			**ipnum; //节省堆栈 2006-1-6
+	UInt16			curIP = 0;
+	UInt16			maxIP = 0;
+	UInt8			actionCode = noAction;
+	RectangleType	frmRec;
+	MRecordType		*(*GetMatchedRecPtr)(DmOpenRef *dbRef, DmOpenRef *pydbRef, UInt16 recI, Char *keyStr, Char *pyBuf, Char *nameBuf, UInt16 *sStr, MRecordType *mRec, UInt16 *mRecC, ChineseMatePref *cf);
+	
+	FrmGetFormBounds(frmP, &frmRec);
+	fldLookupStrPtr = MemPtrNew(10);
+	MemSet(fldLookupStrPtr, 10, 0x00);
+	
+	if (dpMode)
+	{
+		fldTextHandle = MemHandleNew(50);
+		fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+		MemSet(fldTextPtr, 50, 0x00);
+		MemHandleUnlock(fldTextHandle);
+		FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+	
+		dbRef = DmOpenDatabaseByTypeCreator('FStr', 'REiC', dmModeReadOnly);
+		fldTextHandle = DmQueryRecord(dbRef, 1);
+		fldTextPtr = (Char *)MemHandleLock(fldTextHandle);
+		addrFullName = MemPtrNew(MemPtrSize(fldTextPtr));
+		StrCopy(addrFullName, fldTextPtr);
+		MemHandleUnlock(fldTextHandle);
+		DmCloseDatabase(dbRef);
+		fldTextPtr = addrFullName;
+		while (*addrFullName)
+		{
+			if (*addrFullName == 0x20)
+			{
+				*addrFullName = 0x00;
+				maxIP ++;
+			}
+			addrFullName ++;
+		}
+		addrFullName = fldTextPtr;
+		ipnum = MemPtrNew(((maxIP + 1) << 2));
+		for (i = 0; i <= maxIP; i ++)
+		{
+			ipnum[i] = MemPtrNew(StrLen(addrFullName) + 1);
+			StrCopy(ipnum[i], addrFullName);
+			addrFullName += StrLen(addrFullName) + 1;
+		}
+		MemPtrFree(fldTextPtr);
+		i = 0;
+		WinPaintChars(ipnum[0], StrLen(ipnum[0]), 63, 114);
+	}
+	
+	bufSize = MemPtrSize(phnNum);
+	addrFullName = MemPtrNew(bufSize); MemSet(addrFullName, bufSize, 0x00);
+	sStr = MemPtrNew((bufSize << 1)); MemSet(sStr, (bufSize << 1), 0x00);
+	PYStr = MemPtrNew(bufSize); MemSet(PYStr, bufSize, 0x00);
+	phnLabel = MemPtrNew(20); MemSet(phnLabel, 20, 0x00);
+	
+	lparam = MemPtrNew(sizeof(dpDrawListParam)); MemSet(lparam, sizeof(dpDrawListParam), 0x00);
+	if (cf->addType == 1)
+	{
+		addrCreator = 'PAdd';
+		GetMatchedRecPtr = GetMatchedRecV2;
+		lparam->lstGetSelTextPtr = dpLstGetSelectionText;
+	}
+	else
+	{
+		addrCreator = 'addr';
+		GetMatchedRecPtr = OLD_GetMatchedRecV2;
+		lparam->lstGetSelTextPtr = OLD_dpLstGetSelectionText;
+	}
+	dbRef = DmOpenDatabaseByTypeCreator('DATA', addrCreator, dmModeReadOnly);
+	pydbRef = DmOpenDatabaseByTypeCreator('CMPY', 'REiC', dmModeReadOnly);
+	totalRec = DmNumRecordsInCategory(dbRef, dmAllCategories);
+	
+	lparam->dbRef = dbRef;
+	lparam->mRecC = 0;
+	lparam->nameBuf = addrFullName;
+	lparam->dpMode = dpMode;
+	lparam->mRec = MemPtrNew(7); MemSet(lparam->mRec, 7, 0x00);//初始节点
+	lparam->mRec->next = NULL; //终止标记
+	curItem = lparam->mRec;
+	lparam->curLstP = lstContactItemPtr;
+	
+	LstSetDrawFunction(lstContactItemPtr, dpDrawList);
+	
+	do
+	{
+keyDectect:
+		EvtGetEvent(&event, evtWaitForever);
+		keyHandled = false;
+		
+		if (event.eType == keyDownEvent)
+		{
+			if (dpMode)
+			{
+				phnStrLen = FldGetTextLength(fldPhnNumPtr);
+			}
+			lookupStrLen = StrLen(fldLookupStrPtr);
+			if (EvtKeydownIsVirtual(&event))
+			{
+				if (cf->addType == 0 && event.data.keyDown.chr == hsKeySymbol)
+				{
+					MemSet(&event, sizeof(EventType), 0);
+					event.eType = nilEvent;
+					EvtEnqueueKey(keyZero, 0, 0);
+					goto keyDectect;
+				}
+				lstSel = LstGetSelection(lstContactItemPtr);
+				if (IsFiveWayNavEvent(&event))
+				{
+					if ((NavKeyPressed(&event, Up) || event.data.keyDown.chr == 11) && lparam->mRecC > 0)
+					{
+						if (lstSel == noListSelection)
+						{
+							lstSel = LstGetTopItem(lstContactItemPtr);
+						}
+						else
+						{
+							if (lstSel > 0)
+							{
+								lstSel --;
+							}
+							else
+							{
+								lstSel = LstGetNumberOfItems(lstContactItemPtr) - 1;
+							}
+						}
+						if (dpMode) //拷贝号码到电话号码栏
+						{
+							fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+							FldSetTextHandle(fldPhnNumPtr, NULL);
+							fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+							rounded = false;
+							//跳过姓名
+							while ((*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType))
+							{
+								if (lstSel > 0)
+								{
+									lstSel --;
+								}
+								else
+								{
+									if (rounded)
+									{
+										lstSel = noListSelection;
+										break;
+									}
+									else
+									{
+										lstSel = LstGetNumberOfItems(lstContactItemPtr) - 1;
+										rounded = true;
+									}
+								}
+							}
+							LstSetSelection(lstContactItemPtr, lstSel);
+							(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+							if (lstSel != noListSelection)
+							{
+								StrDigitCopy(fldTextPtr, lparam->nameBuf);
+							}
+							MemHandleUnlock(fldTextHandle);
+							FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+							FldDrawField(fldPhnNumPtr);
+						}
+						else
+						{
+							lparam->dpMode = true;
+							LstSetSelection(lstContactItemPtr, lstSel);
+							lparam->dpMode = false;
+						}
+						keyHandled = true;
+					}
+					else if ((NavKeyPressed(&event, Down) || event.data.keyDown.chr == 12) && lparam->mRecC > 0)
+					{
+						if (lstSel == noListSelection)
+						{
+							lstSel = LstGetTopItem(lstContactItemPtr);
+						}
+						else
+						{
+							if (lstSel < (LstGetNumberOfItems(lstContactItemPtr) - 1))
+							{
+								lstSel ++;
+							}
+							else
+							{
+								lstSel = 0;
+							}
+						}
+						if (dpMode) //拷贝号码到电话号码栏
+						{
+							fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+							FldSetTextHandle(fldPhnNumPtr, NULL);
+							fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+							rounded = false;
+							//跳过姓名
+							while ((*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType))
+							{
+								if (lstSel < (LstGetNumberOfItems(lstContactItemPtr) - 1))
+								{
+									lstSel ++;
+								}
+								else
+								{
+									if (rounded)
+									{
+										lstSel = noListSelection;
+										break;
+									}
+									else
+									{
+										lstSel = 0;
+										rounded = true;
+									}
+								}
+							}
+							LstSetSelection(lstContactItemPtr, lstSel);
+							(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+							if (lstSel != noListSelection)
+							{
+								StrDigitCopy(fldTextPtr, lparam->nameBuf);
+							}
+							MemHandleUnlock(fldTextHandle);
+							FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+							FldDrawField(fldPhnNumPtr);
+						}
+						else
+						{
+							lparam->dpMode = true;
+							LstSetSelection(lstContactItemPtr, lstSel);
+							lparam->dpMode = false;
+						}
+						keyHandled = true;
+					}
+					else if (NavKeyPressed(&event, Right) && dpMode) //向右，循环IP
+					{
+						WinSetBackColorRGB(color[bgColor], NULL);
+						WinEraseChars(ipnum[curIP], StrLen(ipnum[curIP]), 63, 114);
+						WinSetBackColorRGB(color[curColor], NULL);
+						curIP ++;
+						if (curIP > maxIP)
+						{
+							curIP = 0;
+						}
+						WinPaintChars(ipnum[curIP], StrLen(ipnum[curIP]), 63, 114);
+						keyHandled = true;
+					}
+					else if (NavKeyPressed(&event, Left)) //向左，全部删除
+					{
+						if (dpMode)
+						{
+							fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+							FldSetTextHandle(fldPhnNumPtr, NULL);
+							fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+							*fldTextPtr = 0x00;
+							MemHandleUnlock(fldTextHandle);
+							FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+							FldDrawField(fldPhnNumPtr);
+							phnStrLen = 0;
+						}
+						WinEraseChars(fldLookupStrPtr, lookupStrLen, lookupStrX, lookupStrY);
+						*fldLookupStrPtr = 0x00;
+						lookupStrLen = 0;
+						LstSetListChoices(lstContactItemPtr, NULL, 0);
+						LstDrawList(lstContactItemPtr);
+						LstSetSelection(lstContactItemPtr, noListSelection);
+						keyHandled = true;
+					}
+					else if (NavKeyPressed(&event, Select))
+					{
+						if (dpMode)
+						{
+							fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+							FldSetTextHandle(fldPhnNumPtr, NULL);
+							fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+							if (*fldTextPtr)
+							{
+								StrCopy(phnNum, ipnum[curIP]);
+								StrCat(phnNum, fldTextPtr);
+								exit = true;
+								actionCode = actionDial;
+							}
+							MemHandleUnlock(fldTextHandle);
+							FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+						}
+						else if (lparam->mRecC > 0)
+						{
+							(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+							StrCopy(phnNum, lparam->nameBuf);
+							exit = true;
+							actionCode = noAction;
+						}
+						keyHandled = true;
+					}
+					if (lparam->mRecC > 0)
+					{
+						if (dpMode)
+						{
+							LstDrawList(lstContactItemPtr);
+						}
+						else
+						{
+							lparam->dpMode = true;
+							LstDrawList(lstContactItemPtr);
+							lparam->dpMode = false;
+						}
+					}
+				}
+				else if (event.data.keyDown.keyCode == keyLeftAlt && lparam->mRecC > 0) //Opt键，上翻页
+				{
+					if (LstGetTopItem(lstContactItemPtr) - LstGetVisibleItems(lstContactItemPtr) >= 0)
+					{
+						lstSel = LstGetTopItem(lstContactItemPtr) - LstGetVisibleItems(lstContactItemPtr);
+						if (dpMode)
+						{
+							while (! (*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType))
+							{
+								lstSel ++;
+							}
+							LstSetTopItem(lstContactItemPtr, lstSel);
+							LstSetSelection(lstContactItemPtr, noListSelection);
+							LstDrawList(lstContactItemPtr);
+						}
+						else
+						{
+							lparam->dpMode = true;
+							while (! (*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType))
+							{
+								lstSel ++;
+							}
+							LstSetTopItem(lstContactItemPtr, lstSel);
+							LstSetSelection(lstContactItemPtr, noListSelection);
+							LstDrawList(lstContactItemPtr);
+							lparam->dpMode = false;
+						}
+					}
+					else
+					{
+						LstSetTopItem(lstContactItemPtr, 0);
+						if (dpMode)
+						{
+							LstSetSelection(lstContactItemPtr, noListSelection);
+							LstDrawList(lstContactItemPtr);
+						}
+						else
+						{
+							lparam->dpMode = true;
+							LstSetSelection(lstContactItemPtr, noListSelection);
+							LstDrawList(lstContactItemPtr);
+							lparam->dpMode = false;
+						}
+					}
+					keyHandled = true;
+				}
+				else if (event.data.keyDown.keyCode == keyLeftShift && lparam->mRecC > 0) //左Shift键，下翻页
+				{
+					if (LstGetTopItem(lstContactItemPtr) + LstGetVisibleItems(lstContactItemPtr) < LstGetNumberOfItems(lstContactItemPtr))
+					{
+						lstSel = LstGetTopItem(lstContactItemPtr) + LstGetVisibleItems(lstContactItemPtr);
+						//必须是联系人名
+						if (dpMode)
+						{
+							while (! (*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType))
+							{
+								lstSel --;
+							}
+							LstSetTopItem(lstContactItemPtr, lstSel);
+							LstSetSelection(lstContactItemPtr, noListSelection);
+							LstDrawList(lstContactItemPtr);
+						}
+						else
+						{
+							lparam->dpMode = true;
+							while (! (*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType))
+							{
+								lstSel --;
+							}
+							LstSetTopItem(lstContactItemPtr, lstSel);
+							LstSetSelection(lstContactItemPtr, noListSelection);
+							LstDrawList(lstContactItemPtr);
+							lparam->dpMode = false;
+						}
+					}
+					keyHandled = true;
+				}
+				else if (event.data.keyDown.chr == keyHard4) //挂机键
+				{
+					exit = true;
+					keyHandled = true;
+					actionCode = noAction;
+				}
+				else if (event.data.keyDown.chr == keyHard1 && dpMode) //拨打键
+				{
+					fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+					FldSetTextHandle(fldPhnNumPtr, NULL);
+					fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+					if (*fldTextPtr)
+					{
+						StrCopy(phnNum, fldTextPtr);
+						exit = true;
+						actionCode = actionDial;
+					}
+					MemHandleUnlock(fldTextHandle);
+					FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+					keyHandled = true;
+				}
+				else if (event.data.keyDown.chr == keyHard2) //日历键
+				{
+					if (dpMode)
+					{
+						fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+						FldSetTextHandle(fldPhnNumPtr, NULL);
+						fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+						if (*fldTextPtr)
+						{
+							StrCopy(phnNum, fldTextPtr);
+							exit = true;
+							actionCode = actionAddContact;
+						}
+						MemHandleUnlock(fldTextHandle);
+						FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+					}
+					else
+					{
+						lparam->dpMode = true;
+						if ((*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType)) //返回姓名和第一个号码
+						{
+							StrCopy(phnNum, lparam->nameBuf);
+							StrCat(phnNum, "\n");
+							lstSel ++;
+							if (lstSel < LstGetNumberOfItems(lstContactItemPtr))
+							{
+								(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+								StrCat(phnNum, lparam->nameBuf);
+							}
+						}
+						else
+						{
+							Int16 tmpIndex = lstSel;
+							while (lstSel > 0 && (! (*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType)))
+							{
+								lstSel --;
+							}
+							(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+							StrCopy(phnNum, lparam->nameBuf);
+							StrCat(phnNum, "\n");
+							(*(lparam->lstGetSelTextPtr))((void *)lparam, tmpIndex, &phnType);
+							StrCat(phnNum, lparam->nameBuf);
+						}
+						lparam->dpMode = false;
+						exit = true;
+						actionCode = noAction;
+					}
+					keyHandled = true;
+				}
+				else if (event.data.keyDown.chr == keyHard3 && dpMode) //短讯键
+				{
+					//发送短讯
+					if (FldGetTextLength(fldPhnNumPtr) > 0)
+					{
+						fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+						FldSetTextHandle(fldPhnNumPtr, NULL);
+						fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+						StrCopy(phnNum, fldTextPtr);
+						exit = true;
+						actionCode =actionSendMsg;
+						MemHandleUnlock(fldTextHandle);
+						FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+					}
+					if (lstSel != noListSelection) //号码是从联系人列表处获得的
+					{
+						(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+						if ((AddressPhoneLabels)phnType != emailLabel) //发短讯
+						{
+							actionCode =actionSendMsg;
+						}
+						else
+						{
+							StrCopy(phnNum, lparam->nameBuf);
+							phnNum[StrLen(phnNum) - 4] = 0x00;
+							actionCode = actionSendEmail;
+						}
+					}
+				}
+			}
+			else if (event.data.keyDown.chr == 0x0020) //空格，IP拨号
+			{
+				if (dpMode)
+				{
+					fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+					FldSetTextHandle(fldPhnNumPtr, NULL);
+					fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+					if (*fldTextPtr)
+					{
+						StrCopy(phnNum, ipnum[curIP]);
+						StrCat(phnNum, fldTextPtr);
+						exit = true;
+						actionCode = actionDial;
+					}
+					MemHandleUnlock(fldTextHandle);
+					FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+				}
+				else if (lparam->mRecC > 0)
+				{
+					(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+					StrCopy(phnNum, lparam->nameBuf);
+					exit = true;
+					actionCode = noAction;
+				}
+				keyHandled = true;
+			}
+			else if (event.data.keyDown.chr == 0x000A && ! dpMode && lstSel != noListSelection)
+			{
+				lparam->dpMode = true;
+				(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+				lparam->dpMode = false;
+				StrCopy(phnNum, lparam->nameBuf);
+				exit = true;
+				actionCode = noAction;
+			}
+			else if (phnStrLen < 49 && ((event.data.keyDown.chr >= keyA && event.data.keyDown.chr <= keyZ) || event.data.keyDown.chr == keyZero))
+			{
+				keyHandled = true;
+				//如果是数字，加入
+				if ((event.data.keyDown.chr == keyE || event.data.keyDown.chr == keyR || event.data.keyDown.chr == keyT ||
+					 event.data.keyDown.chr == keyD || event.data.keyDown.chr == keyF || event.data.keyDown.chr == keyG ||
+					 event.data.keyDown.chr == keyX || event.data.keyDown.chr == keyC || event.data.keyDown.chr == keyV ||
+					 event.data.keyDown.chr == keyZero) && dpMode)
+				{
+					fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+					FldSetTextHandle(fldPhnNumPtr, NULL);
+					fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+					switch (event.data.keyDown.chr)
+					{
+						case keyE:
+						{
+							fldTextPtr[phnStrLen] = 0x31;
+							break;
+						}
+						case keyR:
+						{
+							fldTextPtr[phnStrLen] = 0x32;
+							break;
+						}
+						case keyT:
+						{
+							fldTextPtr[phnStrLen] = 0x33;
+							break;
+						}
+						case keyD:
+						{
+							fldTextPtr[phnStrLen] = 0x34;
+							break;
+						}
+						case keyF:
+						{
+							fldTextPtr[phnStrLen] = 0x35;
+							break;
+						}
+						case keyG:
+						{
+							fldTextPtr[phnStrLen] = 0x36;
+							break;
+						}
+						case keyX:
+						{
+							fldTextPtr[phnStrLen] = 0x37;
+							break;
+						}
+						case keyC:
+						{
+							fldTextPtr[phnStrLen] = 0x38;
+							break;
+						}
+						case keyV:
+						{
+							fldTextPtr[phnStrLen] = 0x39;
+							break;
+						}
+						case keyZero:
+						{
+							fldTextPtr[phnStrLen] = 0x30;
+							break;
+						}
+					}
+					fldTextPtr[phnStrLen + 1] = 0x00;
+					MemHandleUnlock(fldTextHandle);
+					FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+					FldDrawField(fldPhnNumPtr);
+				}
+				//加入搜索列表
+				if (lookupStrLen < 5)
+				{
+					if (event.data.keyDown.chr == keyZero)
+					{
+						fldLookupStrPtr[lookupStrLen] = 0x30;
+					}
+					else
+					{
+						fldLookupStrPtr[lookupStrLen] = (Char) (event.data.keyDown.chr - 32);
+					}
+					lookupStrLen ++;
+					fldLookupStrPtr[lookupStrLen] = 0x00;
+					WinPaintChars(fldLookupStrPtr, lookupStrLen, lookupStrX, lookupStrY);
+					if (lookupStrLen > 0)
+					{
+						MemSet(addrFullName, bufSize, 0x00);
+						MemSet(PYStr, bufSize, 0x00);
+						MemSet(sStr, (bufSize << 1), 0x00);
+						*phnLabel = 0x00;
+						if (totalRec > 0)
+						{
+							mRecPtrReset(lparam->mRec);
+							lparam->mRecC = 0;
+							curItem = lparam->mRec;
+							for (i = 0; i < totalRec; i ++)
+							{
+								curItem = (* GetMatchedRecPtr)(dbRef, pydbRef, i, fldLookupStrPtr, PYStr, addrFullName, sStr, curItem, &lparam->mRecC, cf);
+								MemSet(addrFullName, bufSize, 0x00);
+								MemSet(PYStr, bufSize, 0x00);
+								MemSet(sStr, (bufSize << 1), 0x00);
+								*PYStr = 0x00;
+								*phnLabel = 0x00;
+							}
+							if (lparam->mRecC > 0)
+							{
+								LstSetListChoices(lstContactItemPtr, (Char **)(&lparam), lparam->mRecC);
+								if (dpMode)
+								{
+									LstDrawList(lstContactItemPtr);
+									LstSetSelection(lstContactItemPtr, noListSelection);
+								}
+								else
+								{
+									lparam->dpMode = true;
+									LstDrawList(lstContactItemPtr);
+									LstSetSelection(lstContactItemPtr, noListSelection);
+									lparam->dpMode = false;
+								}
+							}
+							else
+							{
+								LstSetListChoices(lstContactItemPtr, NULL, 0);
+								LstDrawList(lstContactItemPtr);
+								LstSetSelection(lstContactItemPtr, noListSelection);
+							}
+						}
+					}
+				}
+			}
+			else if (event.data.keyDown.chr == 0x0008) //删除字符
+			{
+				keyHandled = true;
+				if (dpMode)
+				{
+					phnStrLen = FldGetTextLength(fldPhnNumPtr);
+				}
+				
+				if (phnStrLen == 0 && lookupStrLen == 0)
+				{
+					//直接退出
+					exit = true;
+					actionCode = noAction;
+				}
+				else
+				{
+					if (phnStrLen > 0)
+					{
+						fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+						FldSetTextHandle(fldPhnNumPtr, NULL);
+						fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+						phnStrLen --;
+						fldTextPtr[phnStrLen] = 0x00;
+						MemHandleUnlock(fldTextHandle);
+						FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+						FldDrawField(fldPhnNumPtr);
+					}
+					if (lookupStrLen > 0)
+					{
+						WinEraseChars(fldLookupStrPtr, lookupStrLen, lookupStrX, lookupStrY);
+						lookupStrLen --;
+						fldLookupStrPtr[lookupStrLen] = 0x00;
+						WinPaintChars(fldLookupStrPtr, lookupStrLen, lookupStrX, lookupStrY);
+						MemSet(addrFullName, bufSize, 0x00);
+						MemSet(PYStr, bufSize, 0x00);
+						MemSet(sStr, (bufSize << 1), 0x00);
+						*phnLabel = 0x00;
+						if (totalRec > 0)
+						{
+							mRecPtrReset(lparam->mRec);
+							lparam->mRecC = 0;
+							curItem = lparam->mRec;
+							for (i = 0; i < totalRec; i ++)
+							{
+								curItem = (* GetMatchedRecPtr)(dbRef, pydbRef, i, fldLookupStrPtr, PYStr, addrFullName, sStr, curItem, &lparam->mRecC, cf);
+								MemSet(addrFullName, bufSize, 0x00);
+								MemSet(PYStr, bufSize, 0x00);
+								MemSet(sStr, (bufSize << 1), 0x00);
+								*PYStr = 0x00;
+								*phnLabel = 0x00;
+							}
+							if (lparam->mRecC > 0)
+							{
+								LstSetListChoices(lstContactItemPtr, (Char **)(&lparam), lparam->mRecC);
+								if (dpMode)
+								{
+									LstDrawList(lstContactItemPtr);
+									LstSetSelection(lstContactItemPtr, noListSelection);
+								}
+								else
+								{
+									lparam->dpMode = true;
+									LstDrawList(lstContactItemPtr);
+									LstSetSelection(lstContactItemPtr, noListSelection);
+									lparam->dpMode = false;
+								}
+							}
+							else
+							{
+								LstSetListChoices(lstContactItemPtr, NULL, 0);
+								LstDrawList(lstContactItemPtr);
+								LstSetSelection(lstContactItemPtr, noListSelection);
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (event.eType == lstSelectEvent)
+		{
+			if (dpMode)
+			{
+				fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+				FldSetTextHandle(fldPhnNumPtr, NULL);
+				fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+				lstSel = LstGetSelection(lstContactItemPtr);
+				(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+				while (StrDigitCopy(fldTextPtr, lparam->nameBuf) < 2)
+				{
+					if (lstSel < (LstGetNumberOfItems(lstContactItemPtr) - 1))
+					{
+						lstSel ++;
+						LstSetSelection(lstContactItemPtr, lstSel);
+					}
+					else
+					{
+						break;
+					}
+					(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+				}
+				LstDrawList(lstContactItemPtr);
+				if (*fldTextPtr)
+				{
+					StrCopy(phnNum, fldTextPtr);
+					exit = true;
+					actionCode = actionDial;
+				}
+				MemHandleUnlock(fldTextHandle);
+				FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+				FldDrawField(fldPhnNumPtr);
+			}
+			else if (lparam->mRecC > 0)
+			{
+				(*(lparam->lstGetSelTextPtr))((void *)lparam, lstSel, &phnType);
+				StrCopy(phnNum, lparam->nameBuf);
+				exit = true;
+				actionCode = noAction;
+			}
+		}
+		else if (event.eType == penDownEvent)
+		{
+			if (event.screenX < 0 || event.screenX > frmRec.extent.x || event.screenY < 0 || event.screenY > frmRec.extent.y)
+			{
+				keyHandled = true;
+				exit = true;
+			}
+			else if (dpMode)
+			{
+				if ((event.screenX >= 51 && event.screenX <= 93) && (event.screenY >= 114 && event.screenY <= 124))
+				{
+					//IP拨号
+					fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+					FldSetTextHandle(fldPhnNumPtr, NULL);
+					fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+					StrCopy(phnNum, ipnum[curIP]);
+					StrCat(phnNum, fldTextPtr);
+					exit = true;
+					actionCode = actionDial;
+					MemHandleUnlock(fldTextHandle);
+					FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+				}
+				else if ((event.screenX >= 96 && event.screenX <= 107) && (event.screenY >= 114 && event.screenY <= 124))
+				{
+					//加入联系人
+					fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+					FldSetTextHandle(fldPhnNumPtr, NULL);
+					fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+					if (*fldTextPtr)
+					{
+						StrCopy(phnNum, fldTextPtr);
+						exit = true;
+						actionCode = actionAddContact;
+					}
+					MemHandleUnlock(fldTextHandle);
+					FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+				}
+				else if ((event.screenX >= 108 && event.screenX <= 119) && (event.screenY >= 114 && event.screenY <= 124))
+				{
+					//发送短讯
+					fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+					FldSetTextHandle(fldPhnNumPtr, NULL);
+					fldTextPtr = (Char *) MemHandleLock(fldTextHandle);
+					if (*fldTextPtr)
+					{
+						StrCopy(phnNum, fldTextPtr);
+						exit = true;
+						actionCode = actionSendMsg;
+					}
+					MemHandleUnlock(fldTextHandle);
+					FldSetTextHandle(fldPhnNumPtr, fldTextHandle);
+				}
+			}
+		}
+		
+		if (keyHandled)
+		{
+			MemSet(&event, sizeof(EventType), 0);
+			event.eType = nilEvent;
+		}
+		else
+		{
+			if (dpMode)
+			{
+				if (! SysHandleEvent(&event))
+				{
+					FrmDispatchEvent(&event);
+				}
+			}
+			else
+			{
+				lparam->dpMode = true;
+				if (! SysHandleEvent(&event))
+				{
+					FrmDispatchEvent(&event);
+				}
+				lparam->dpMode = false;
+			}
+		}
+	} while (event.eType != appStopEvent && ! exit);
+	
+	DmCloseDatabase(pydbRef);
+	DmCloseDatabase(dbRef);
+	
+	mRecPtrReset(lparam->mRec);
+	MemPtrFree(lparam->mRec);
+	MemPtrFree(lparam);
+	
+	MemPtrFree(fldLookupStrPtr);
+	MemPtrFree(sStr);
+	MemPtrFree(addrFullName);
+	MemPtrFree(PYStr);
+	MemPtrFree(phnLabel);
+	
+	if (dpMode)
+	{
+		for (i = 0; i <= maxIP; i ++)
+		{
+			MemPtrFree(ipnum[i]);
+		}
+		MemPtrFree(ipnum);
+	
+		fldTextHandle = FldGetTextHandle(fldPhnNumPtr);
+		FldSetTextHandle(fldPhnNumPtr, NULL);
+		MemHandleFree(fldTextHandle);
+	}
+	
+	return actionCode;
+}
+
+//输入易通讯录查找
+static Boolean fastInputContactSearchEventHandler(Char *str, ChineseMatePref *cf)
+{
+	FormType		*frmP;
+	ListType		*lstContactsPtr;	
+	
+	//初始化窗口
+	frmP = FrmInitForm(frmFastContacts);
+	FrmDrawForm(frmP);
+	FrmSetActiveForm(frmP);
+	
+	lstContactsPtr = (ListType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, lstContacts));
+	LstSetSelection(lstContactsPtr, noListSelection);
+	
+	//WinDrawGrayLine(25, 12, 60, 12);
+	
+	pySearchHandler(cf, str, false, frmP, NULL, lstContactsPtr, NULL, 25, 2);
+
+	//清除窗口
+	FrmEraseForm(frmP);
+	FrmDeleteForm(frmP);
+	
+	return false;
+}
+
+//输入易
+static Boolean fastInputEventHandler(Char *str, ChineseMatePref *cf)
+{
+	EventType		event;
+	UInt16			error;
+	FormType		*frmP;
+	FieldType		*fldPuncPtr;
+	FieldType		*fldDatePtr;
+	FieldType		*fldTimePtr;
+	ListType		*lstQuickTextPtr;
+	MemHandle		fldTextHandle = 0;
+	Char			**lstItemStr;
+	Char			*fldPuncTextPtr;
+	Char			*fldDateTextPtr;
+	Char			*fldTimeTextPtr;
+	Char			*DateBuf;
+	Char			*TimeBuf;
+	Char			*SecondBuf;
+	UInt8			curObject;
+	UInt32			curSysTime;
+	DateTimeType	curDateTime;
+	Boolean			keyHandled;
+	UInt16			curSel = 0;
+	UInt16			curSelEnd = 2;
+	Boolean			QuickTextExist = true;
+	DmOpenRef		*dbRef;
+	UInt16			RecCount = 0;
+	MemHandle		recH;
+	Char			*recP;
+	UInt16			i;
+	UInt16			lstItem = 0;
+	Boolean			exit = false;
+
+	//初始化，以“输入易”模式启动
+Init:
+	frmP = FrmInitForm(frmFastInput);
+	FrmDrawForm(frmP);
+	FrmSetActiveForm(frmP);
+	fldPuncPtr = (FieldType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, fldPunc));
+	fldDatePtr = (FieldType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, fldDate));
+	fldTimePtr = (FieldType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, fldTime));
+	lstQuickTextPtr = (ListType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, lstQuickText));
+	dbRef = DmOpenDatabaseByTypeCreator('SMqt', 'HsCh', dmModeReadOnly);
+	if (DmGetLastErr())
+	{
+		QuickTextExist = false;
+	}
+	else
+	{
+		RecCount = DmNumRecordsInCategory(dbRef, dmAllCategories);
+		if (RecCount > 0)
+		{
+			lstItemStr = MemPtrNew((RecCount << 2));
+			for (i = 0; i < RecCount; i ++)
+			{
+				recH = DmQueryRecord(dbRef, i);
+				recP = (Char *)MemHandleLock(recH);
+				lstItemStr[i] = MemPtrNew(MemPtrSize(recP));
+				StrCopy(lstItemStr[i], recP);
+				MemHandleUnlock(recH);
+			}
+			LstSetListChoices (lstQuickTextPtr, lstItemStr, RecCount);
+		}
+		DmCloseDatabase(dbRef);
+	}
+	LstDrawList(lstQuickTextPtr);
+	LstSetSelection(lstQuickTextPtr, noListSelection);
+	
+	fldTextHandle = MemHandleNew(31);
+	fldPuncTextPtr = MemHandleLock(fldTextHandle);
+	dbRef = DmOpenDatabaseByTypeCreator('FStr', appFileCreator, dmModeReadOnly);
+	recH = DmQueryRecord(dbRef, 0);
+	recP = (Char *) MemHandleLock(recH);
+	StrCopy(fldPuncTextPtr, recP);
+	MemHandleUnlock(recH);
+	DmCloseDatabase(dbRef);
+	MemHandleUnlock(fldTextHandle);
+	FldSetTextHandle(fldPuncPtr, fldTextHandle);
+	FldDrawField(fldPuncPtr);
+	FldSetSelection(fldPuncPtr, curSel, curSelEnd);
+	
+	DateBuf = MemPtrNew(dateStringLength);
+	TimeBuf = MemPtrNew(timeStringLength);
+	SecondBuf = MemPtrNew(maxStrIToALen);
+	TimSecondsToDateTime(TimGetSeconds(), &curDateTime);
+	DateToAscii(curDateTime.month, curDateTime.day, curDateTime.year, dfYMDWithDashes, DateBuf);
+	TimeToAscii(curDateTime.hour, curDateTime.minute, tfColon24h, TimeBuf);
+	StrIToA(SecondBuf, (UInt32) curDateTime.second);
+
+	fldTextHandle = MemHandleNew(50);
+	fldDateTextPtr = MemHandleLock(fldTextHandle);
+	fldDateTextPtr[0] = 0x00; fldDateTextPtr[49] = 0x00;
+	StrCat(fldDateTextPtr, DateBuf);
+	MemHandleUnlock(fldTextHandle);
+	FldSetTextHandle(fldDatePtr, fldTextHandle);
+	FldDrawField(fldDatePtr);
+	
+	fldTextHandle = MemHandleNew(50);
+	fldTimeTextPtr = MemHandleLock(fldTextHandle);
+	fldTimeTextPtr[0] = 0x00; fldTimeTextPtr[49] = 0x00;
+	StrCat(fldTimeTextPtr, TimeBuf);
+	StrCat(fldTimeTextPtr, ":");
+	StrCat(fldTimeTextPtr, SecondBuf);
+	MemHandleUnlock(fldTextHandle);
+	FldSetTextHandle(fldTimePtr, fldTextHandle);
+	FldDrawField(fldTimePtr);
+	
+	curObject = 0;
+	curSysTime = TimGetSeconds();
+	
+	do 
+	{
+		EvtGetEvent(&event, 100);
+		if ((TimGetSeconds() - curSysTime) >= 1)
+		{
+			curSysTime = TimGetSeconds();
+			fldTextHandle = FldGetTextHandle(fldTimePtr);
+			FldSetTextHandle(fldTimePtr, NULL);
+			fldTimeTextPtr = MemHandleLock(fldTextHandle);
+			TimSecondsToDateTime(TimGetSeconds(), &curDateTime);
+			TimeToAscii(curDateTime.hour, curDateTime.minute, tfColon24h, TimeBuf);
+			StrIToA(SecondBuf, (UInt32) curDateTime.second);
+			fldTimeTextPtr[0] = 0x00;
+			StrCat(fldTimeTextPtr, TimeBuf);
+			StrCat(fldTimeTextPtr, ":");
+			StrCat(fldTimeTextPtr, SecondBuf);
+			MemHandleUnlock(fldTextHandle);
+			FldSetTextHandle(fldTimePtr, fldTextHandle);
+			FldDrawField(fldTimePtr);
+			if (curObject == 1 && curSel == 1)
+			{
+				FldSetSelection(fldTimePtr, 0, FldGetTextLength(fldTimePtr));
+			}
+		}
+		
+		keyHandled = false;
+		if (event.eType == keyDownEvent)
+		{
+			if (EvtKeydownIsVirtual(&event)) //FiveWay Nav Check
+			{
+				if (IsFiveWayNavEvent(&event))
+				{
+					if (NavKeyPressed(&event, Right))
+					{
+						if (curSel < 29 && curObject == 0)
+						{
+							keyHandled = true;
+							fldTextHandle = FldGetTextHandle(fldPuncPtr);
+							fldPuncTextPtr = MemHandleLock(fldTextHandle);
+							FldSetTextHandle(fldPuncPtr, NULL);
+							while (curSel < 29 && fldPuncTextPtr[curSel] != 0x20 && fldPuncTextPtr[curSel] != 0x00)
+							{
+								curSel += TxtGetNextChar(fldPuncTextPtr, (UInt32)curSel, NULL);
+							}
+							if (fldPuncTextPtr[curSel] == 0x00)
+							{
+								curSel = 0; //没有下一个特殊符号了
+							}
+							else
+							{
+								curSel ++; //跳过空格，指向下一个符号的开始
+							}
+							curSelEnd = curSel;
+							while (curSelEnd < 29 && fldPuncTextPtr[curSelEnd] != 0x20 && fldPuncTextPtr[curSelEnd] != 0x00)
+							{
+								curSelEnd += TxtGetNextChar(fldPuncTextPtr, (UInt32)curSelEnd, NULL);
+							}
+							if (curSelEnd > 29)
+							{
+								curSelEnd = 29;
+							}
+							MemHandleUnlock(fldTextHandle);
+							FldSetTextHandle(fldPuncPtr, fldTextHandle);
+							FldDrawField(fldPuncPtr);
+							FldSetSelection(fldPuncPtr, curSel, curSelEnd);
+						}
+						else if (curObject == 1)
+						{
+							keyHandled = true;
+							if (curSel == 0)
+							{
+								curSel = 1;
+								FldSetSelection(fldDatePtr, 0, 0);
+								FldSetSelection(fldTimePtr, 0, FldGetTextLength(fldTimePtr));
+							}
+							else
+							{
+								curSel = 0;
+								FldSetSelection(fldTimePtr, 0, 0);
+								FldSetSelection(fldDatePtr, 0, FldGetTextLength(fldDatePtr));
+							}
+						}
+					}
+					else if (NavKeyPressed(&event, Left))
+					{
+						if (curObject == 0)
+						{
+							keyHandled = true;
+							fldTextHandle = FldGetTextHandle(fldPuncPtr);
+							fldPuncTextPtr = MemHandleLock(fldTextHandle);
+							FldSetTextHandle(fldPuncPtr, NULL);
+							if (curSel == 0)
+							{
+								curSel = StrLen(fldPuncTextPtr);
+							}
+							curSel -= 2;
+							while (curSel > 0 && fldPuncTextPtr[curSel] != 0x20)
+							{
+								curSel -= TxtGetPreviousChar(fldPuncTextPtr, (UInt32)curSel, NULL);
+							}
+							if (curSel > 0)
+							{
+								curSel ++;
+							}
+							curSelEnd = curSel;
+							while (curSelEnd < 29 && fldPuncTextPtr[curSelEnd] != 0x20 && fldPuncTextPtr[curSelEnd] != 0x00)
+							{
+								curSelEnd += TxtGetNextChar(fldPuncTextPtr, (UInt32)curSelEnd, NULL);
+							}
+							if (curSelEnd > 29)
+							{
+								curSelEnd = 29;
+							}
+							MemHandleUnlock(fldTextHandle);
+							FldSetTextHandle(fldPuncPtr, fldTextHandle);
+							FldDrawField(fldPuncPtr);
+							FldSetSelection(fldPuncPtr, curSel, curSelEnd);
+						}
+						else if (curObject == 1)
+						{
+							keyHandled = true;
+							if (curSel == 1)
+							{
+								curSel = 0;
+								FldSetSelection(fldDatePtr, 0, FldGetTextLength(fldDatePtr));
+								FldSetSelection(fldTimePtr, 0, 0);
+							}
+							else
+							{
+								curSel = 1;
+								FldSetSelection(fldTimePtr, 0, FldGetTextLength(fldTimePtr));
+								FldSetSelection(fldDatePtr, 0, 0);
+							}
+						}
+					}
+					else if ((NavKeyPressed(&event, Up) || event.data.keyDown.chr == 11))
+					{
+						keyHandled = true;
+						if (lstItem == 0)
+						{
+							if (curObject == 2) //QuickText -> DateTime
+							{
+								LstSetSelection(lstQuickTextPtr, noListSelection);
+								FldSetSelection(fldDatePtr, 0, FldGetTextLength(fldDatePtr));
+								curSel = 0;
+								curObject --;
+							}
+							else if (curObject == 1) //DateTime -> Punc
+							{
+								FldSetSelection(fldDatePtr, 0, 0);
+								FldSetSelection(fldTimePtr, 0, 0);
+								
+								curSel = 0;
+								curSelEnd = 0;
+								fldTextHandle = FldGetTextHandle(fldPuncPtr);
+								fldPuncTextPtr = MemHandleLock(fldTextHandle);
+								FldSetTextHandle(fldPuncPtr, NULL);
+								while (curSelEnd < 29 && fldPuncTextPtr[curSelEnd] != 0x20 && fldPuncTextPtr[curSelEnd] != 0x00)
+								{
+									curSelEnd += TxtGetNextChar(fldPuncTextPtr, (UInt32)curSelEnd, NULL);
+								}
+								if (curSelEnd > 29)
+								{
+									curSelEnd = 29;
+								}
+								MemHandleUnlock(fldTextHandle);
+								FldSetTextHandle(fldPuncPtr, fldTextHandle);
+								FldDrawField(fldPuncPtr);
+								FldSetSelection(fldPuncPtr, curSel, curSelEnd);
+								curObject --;
+							}
+							else if (curObject == 0)//Punc -> QuickText
+							{
+								FldSetSelection(fldPuncPtr, 0, 0);
+								curObject = 2;
+								if (RecCount > 0)
+								{
+									LstSetSelection(lstQuickTextPtr, RecCount - 1);
+									lstItem = RecCount - 1;
+								}
+								else
+								{
+									lstItem = 0;
+								}
+							}
+						}
+						else
+						{
+							lstItem --;
+							LstSetSelection(lstQuickTextPtr, lstItem);
+						}
+					}
+					else if ((NavKeyPressed(&event, Down) || event.data.keyDown.chr == 12))
+					{
+						keyHandled = true;
+						if (curObject == 0) //Punc -> DateTime
+						{
+							FldSetSelection(fldPuncPtr, 0, 0);
+							FldSetSelection(fldDatePtr, 0, FldGetTextLength(fldDatePtr));
+							curSel = 0;
+							curObject ++;
+						}
+						else if (curObject == 1 && QuickTextExist) //DateTime -> QuickText
+						{
+							FldSetSelection(fldDatePtr, 0, 0);
+							FldSetSelection(fldTimePtr, 0, 0);
+							LstSetSelection(lstQuickTextPtr, 0);
+							curObject ++;
+						}
+						else if (curObject == 2 && lstItem < RecCount)
+						{
+							lstItem ++;
+							if (lstItem == RecCount)
+							{
+								lstItem = 0; //QuickText -> Punc;
+								LstSetSelection(lstQuickTextPtr, noListSelection);
+								curSel = 0;
+								curSelEnd = 0;
+								fldTextHandle = FldGetTextHandle(fldPuncPtr);
+								fldPuncTextPtr = MemHandleLock(fldTextHandle);
+								FldSetTextHandle(fldPuncPtr, NULL);
+								while (curSelEnd < 29 && fldPuncTextPtr[curSelEnd] != 0x20 && fldPuncTextPtr[curSelEnd] != 0x00)
+								{
+									curSelEnd += TxtGetNextChar(fldPuncTextPtr, (UInt32)curSelEnd, NULL);
+								}
+								if (curSelEnd > 29)
+								{
+									curSelEnd = 29;
+								}
+								MemHandleUnlock(fldTextHandle);
+								FldSetTextHandle(fldPuncPtr, fldTextHandle);
+								FldDrawField(fldPuncPtr);
+								FldSetSelection(fldPuncPtr, curSel, curSelEnd);
+								curObject = 0;
+							}
+							else
+							{
+								LstSetSelection(lstQuickTextPtr, lstItem);
+							}
+						}
+					}
+					else if (NavKeyPressed(&event, Select))
+					{
+						keyHandled = true;
+						if (curObject == 2) //Return QuickText
+						{
+							StrCat(str, LstGetSelectionText(lstQuickTextPtr, LstGetSelection(lstQuickTextPtr)));
+						}
+						else if (curObject == 1) //Return DateTime
+						{
+							if (curSel == 0)
+							{
+								StrCat(str, FldGetTextPtr(fldDatePtr));
+							}
+							else
+							{
+								StrCat(str, FldGetTextPtr(fldTimePtr));
+							}
+						}
+						else if (curObject == 0)
+						{
+							fldPuncTextPtr = FldGetTextPtr(fldPuncPtr);
+							i = 0;
+							for ( ; curSel <= curSelEnd; curSel ++)
+							{
+								if (fldPuncTextPtr[curSel] != 0x20)
+								{
+									str[i] = fldPuncTextPtr[curSel];
+									i ++;
+								}
+							}
+							str[i] = 0x00;
+						}
+						StrCat(str, "\0");
+						exit = true;
+					}
+				}
+				else if (event.data.keyDown.chr == keyHard4) //退出
+				{
+					keyHandled = true;
+					exit = true;
+					MemSet(&event, sizeof(EventType), 0);
+					event.eType = nilEvent;
+				}
+			}
+			else if (event.data.keyDown.chr >= 97 && event.data.keyDown.chr <= 122) //通讯录查找
+			{
+				keyHandled = true;
+				//释放内存
+				fldTextHandle = FldGetTextHandle(fldPuncPtr);
+				FldSetTextHandle(fldPuncPtr, NULL);
+				MemHandleFree(fldTextHandle);
+				fldTextHandle = FldGetTextHandle(fldDatePtr);
+				FldSetTextHandle(fldDatePtr, NULL);
+				MemHandleFree(fldTextHandle);
+				fldTextHandle = FldGetTextHandle(fldTimePtr);
+				FldSetTextHandle(fldTimePtr, NULL);
+				MemHandleFree(fldTextHandle);
+				MemPtrFree(DateBuf);
+				MemPtrFree(TimeBuf);
+				MemPtrFree(SecondBuf);
+				if (RecCount > 0)
+				{
+					for (i = 0; i < RecCount; i ++)
+					{
+						MemPtrFree(lstItemStr[i]);
+					}
+					MemPtrFree(lstItemStr);
+				}
+				//清除窗口
+				FrmEraseForm(frmP);
+				FrmDeleteForm(frmP);
+				//调用fcEventLoop，如果返回true，则表示应该退出，否则回到输入易
+				EvtEnqueueKey(event.data.keyDown.chr, 0, 0);
+				exit = ! fastInputContactSearchEventHandler(str, cf);
+				if (exit)
+				{
+					return true;
+				}
+				else
+				{
+					goto Init;
+				}
+			}
+			else if (event.data.keyDown.chr == 0x0008) //Backspace, Quit
+			{
+				keyHandled = true;
+				exit = true;
+			}
+			else if (event.data.keyDown.chr == 0x0020) //Space, Same as 5-Way Center
+			{
+				keyHandled = true;
+				if (curObject == 2) //Return QuickText
+				{
+					StrCat(str, LstGetSelectionText(lstQuickTextPtr, LstGetSelection(lstQuickTextPtr)));
+				}
+				else if (curObject == 1) //Return DateTime
+				{
+					if (curSel == 0)
+					{
+						StrCat(str, FldGetTextPtr(fldDatePtr));
+					}
+					else
+					{
+						StrCat(str, FldGetTextPtr(fldTimePtr));
+					}
+				}
+				else if (curObject == 0)
+				{
+					fldPuncTextPtr = FldGetTextPtr(fldPuncPtr);
+					i = 0;
+					for ( ; curSel <= curSelEnd; curSel ++)
+					{
+						if (fldPuncTextPtr[curSel] != 0x20)
+						{
+							str[i] = fldPuncTextPtr[curSel];
+							i ++;
+						}
+					}
+					str[i] = 0x00;
+				}
+				StrCat(str, "\0");
+				exit = true;
+			}
+		}
+		else if (event.eType == penDownEvent)
+		{
+			if (event.screenX < 0 || event.screenX > 105 || event.screenY < 0 || event.screenY > 110)
+			{
+				keyHandled = true;
+				exit = true;
+			}
+		}
+		if (! keyHandled)
+		{
+			if (! SysHandleEvent(&event))
+			{
+				if (! MenuHandleEvent(0, &event, &error))
+				{
+					FrmDispatchEvent(&event);
+				}
+			}
+		}
+	} while (event.eType != appStopEvent && ! exit);
+	
+	//释放内存
+	fldTextHandle = FldGetTextHandle(fldPuncPtr);
+	FldSetTextHandle(fldPuncPtr, NULL);
+	MemHandleFree(fldTextHandle);
+	fldTextHandle = FldGetTextHandle(fldDatePtr);
+	FldSetTextHandle(fldDatePtr, NULL);
+	MemHandleFree(fldTextHandle);
+	fldTextHandle = FldGetTextHandle(fldTimePtr);
+	FldSetTextHandle(fldTimePtr, NULL);
+	MemHandleFree(fldTextHandle);
+	MemPtrFree(DateBuf);
+	MemPtrFree(TimeBuf);
+	MemPtrFree(SecondBuf);
+	if (RecCount > 0)
+	{
+		for (i = 0; i < RecCount; i ++)
+		{
+			MemPtrFree(lstItemStr[i]);
+		}
+		MemPtrFree(lstItemStr);
+	}
+	//清除窗口
+	FrmEraseForm(frmP);
+	FrmDeleteForm(frmP);
+	return true;
+}
+
+static void AboutBox(FormType * frmP)
+{
+	//FieldType	* fldP;
+	EventType	event;
+	Boolean		exit = false;
+	//const Char	* thxStr = "感谢Baba811、草语、Joey等的测试和支持以及许润华(Treo来电秀)的无私指导；感谢wowmouse的帮助文档，感谢雪梅、草语及Tim协助我处理多音字拼音表，以及感谢所有支持我的朋友。\n^_^";
+	
+	FrmDrawForm(frmP);
+	FrmSetActiveForm(frmP);
+	//fldP = (FieldType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, fldThx));
+	
+	//FldInsert(fldP, thxStr, StrLen(thxStr));
+	
+	do
+	{
+		EvtGetEvent(&event, evtWaitForever);
+		
+		if (event.eType == ctlSelectEvent)
+		{
+			if (event.data.ctlSelect.controlID == btnOK)
+			{
+				exit = true;
+			}
+		}
+		else if (! SysHandleEvent(&event))
+		{
+			FrmDispatchEvent(&event);
+		}
+	} while (exit == false);
+	
+	FrmEraseForm(frmP);
+}
+
+static Boolean MainFormDoCommand(UInt16 command)
+{
+	Boolean     handled = false;
+	FormType *  pForm;
+
+	switch (command) {
+		case OptionAbout:
+			pForm = FrmInitForm(AboutForm);
+			AboutBox(pForm);
+			FrmReturnToForm(0);
+			handled = true;
+			break;
+		case menuHelp:
+			FrmHelp(1000);
+			break;
+
+	}
+	
+	return handled;
+}
+
+static Boolean MainFormHandleEvent(EventType * eventP)
+{
+	Boolean				handled = false;
+	FormType			*frmP;
+	FormType			*frmDialogP;
+	FieldType			*fldP;
+	LocalID				dbID;
+	UInt16				cardNo;
+	UInt16				pSize;
+	ChineseMatePref		cPref;
+	ChineseMatePref		*cpf; //改为指针以便作为消息的参数（2005-11-15）。
+	UInt32				cpfAddr;
+	EventType			kevent;
+	const Char			*defaultStr = "～ 々 :) ;) :p :D :(";
+	
+	switch (eventP->eType) 
+	{
+		case menuEvent:
+			return MainFormDoCommand(eventP->data.menu.itemID);
+			break;
+
+		case frmOpenEvent:
+			
+			handled = true;
+			break;
+			
+		case frmUpdateEvent:
+			/* 
+			 * To do any custom drawing here, first call
+			 * FrmDrawForm(), then do your drawing, and
+			 * then set handled to true. 
+			 */
+			break;
+			
+		case ctlSelectEvent:
+		{
+			if (eventP->data.ctlSelect.controlID == btnSetKey)
+			{
+				frmDialogP = FrmInitForm(frmSetKeyTips);
+				FrmDrawForm(frmDialogP);
+				FrmSetActiveForm(frmDialogP);
+				do
+				{
+					EvtGetEvent(&kevent, evtWaitForever);
+				}while (kevent.eType != keyDownEvent);
+				FrmReturnToForm(0);
+				if (EvtKeydownIsVirtual(&kevent))
+				{
+					pSize = sizeof(ChineseMatePref);
+					PrefGetAppPreferences(appFileCreator, appPrefID, &cPref, &pSize, true);
+					cPref.fiKey = kevent.data.keyDown.keyCode;
+					PrefSetAppPreferences(appFileCreator, appPrefID, appPrefVersionNum, &cPref, pSize, true);
+				}
+				else
+				{
+					FrmAlert(alertSetKeyErr);
+				}
+				MemSet(&kevent, sizeof(EventType), 0x00);
+			}
+			else if (eventP->data.ctlSelect.controlID == btnBackToPref)
+			{
+				LaunchWithCommand('appl', 'pref', sysAppLaunchCmdNormalLaunch, NULL);
+			}
+			else if (eventP->data.ctlSelect.controlID == btnDefault)
+			{
+				frmP = FrmGetActiveForm();
+				fldP = (FieldType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, fldCPunc));
+				FldDelete(fldP, 0, 30);
+				FldInsert(fldP, defaultStr, StrLen(defaultStr));
+			}
+			else if (eventP->data.ctlSelect.controlID == btnSave)
+			{
+				DmOpenRef *dbRef;
+				MemHandle recH;
+				MemPtr recP;
+				Char *fldText;
+				UInt32 i;
+				
+				frmP = FrmGetActiveForm();
+				fldP = (FieldType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, fldCPunc));
+				if (FldGetTextLength(fldP) == 0)
+				{
+					FldInsert(fldP, defaultStr, StrLen(defaultStr));
+				}
+				dbRef = DmOpenDatabaseByTypeCreator('FStr', appFileCreator, dmModeReadWrite);
+				recH = DmGetRecord(dbRef, 0);
+				recP = MemHandleLock(recH);
+				for (i = 0; i < 31; i ++)
+				{
+					DmSet(recP, i, 1, 0x00);
+				}
+				fldText = FldGetTextPtr(fldP);
+				DmStrCopy(recP, 0, fldText);
+				MemHandleUnlock(recH);
+				DmReleaseRecord(dbRef, 0, true);
+				DmCloseDatabase(dbRef);
+			}
+			else if (eventP->data.ctlSelect.controlID == pbtnEnable)
+			{
+				frmP = FrmGetActiveForm();
+				SysCurAppDatabase(&cardNo, &dbID);
+				pSize = sizeof(ChineseMatePref);
+				if (FrmGetControlValue(frmP, FrmGetObjectIndex (frmP, pbtnEnable)) == 1)
+				{
+					cpf = MemPtrNew(pSize);
+					PrefGetAppPreferences(appFileCreator, appPrefID, cpf, &pSize, true);
+					MemPtrSetOwner(cpf, 0); //把所有者设置为系统
+					cpfAddr = (UInt32) cpf;
+					FtrSet(appFileCreator, 0, cpfAddr);
+					cpf->fiEnabled = true;
+					PrefSetAppPreferences(appFileCreator, appPrefID, appPrefVersionNum, cpf, pSize, true);
+					SysNotifyRegister(cardNo, dbID, sysNotifyVirtualCharHandlingEvent, NULL, sysNotifyNormalPriority, cpf);
+				}
+				else
+				{
+					if (FtrGet(appFileCreator, 0, &cpfAddr) != ftrErrNoSuchFeature)
+					{
+						cpf = (ChineseMatePref *) cpfAddr;
+						MemPtrFree(cpf);
+						FtrUnregister(appFileCreator, 0);
+						
+						SysCurAppDatabase(&cardNo, &dbID);
+						SysNotifyUnregister(cardNo, dbID, sysNotifyVirtualCharHandlingEvent, sysNotifyNormalPriority);
+					}
+					pSize = sizeof(ChineseMatePref);
+					PrefGetAppPreferences(appFileCreator, appPrefID, &cPref, &pSize, true);
+					cPref.fiEnabled = false;
+					PrefSetAppPreferences(appFileCreator, appPrefID, appPrefVersionNum, &cPref, pSize, true);
+				}
+				handled = true;
+			}
+			else if (eventP->data.ctlSelect.controlID == cbRigourSearch)
+			{
+				pSize = sizeof(ChineseMatePref);
+				PrefGetAppPreferences(appFileCreator, appPrefID, &cPref, &pSize, true);
+				cPref.rigourSearch = ! cPref.rigourSearch;
+				PrefSetAppPreferences(appFileCreator, appPrefID, appPrefVersionNum, &cPref, pSize, true);
+			}
+			break;
+		}
+	}
+	
+	return handled;
+}
+
+static Boolean AppHandleEvent(EventType * eventP)
+{
+	UInt16 formId;
+	FormType * frmP;
+
+	if (eventP->eType == frmLoadEvent)
+	{
+		/* Load the form resource. */
+		formId = eventP->data.frmLoad.formID;
+		frmP = FrmInitForm(formId);
+		FrmSetActiveForm(frmP);
+
+		/* 
+		 * Set the event handler for the form.  The handler of the
+		 * currently active form is called by FrmHandleEvent each
+		 * time is receives an event. 
+		 */
+		switch (formId)
+		{
+			case MainForm:
+				FrmSetEventHandler(frmP, MainFormHandleEvent);
+				break;
+
+		}
+		return true;
+	}
+
+	return false;
+}
+
+static void AppEventLoop(void)
+{
+	UInt16				error;
+	EventType			event;
+	FormType			*frmP;
+	FieldType			*fldP;
+	UInt16				pSize;
+	ChineseMatePref		cPref;
+	ChineseMatePref		*cpf;
+	UInt32				cpfAddr;
+	UInt32				companyID;
+	UInt32				deviceID;
+	const Char			*defaultStr = "～ 々 :) ;) :p :D :(";
+	MemHandle			recHandle;
+	Char				*recPtr;
+
+	do 
+	{
+		EvtGetEvent(&event, evtWaitForever);
+
+		if (! SysHandleEvent(&event))
+		{
+			if (! MenuHandleEvent(0, &event, &error))
+			{
+				if (! AppHandleEvent(&event))
+				{
+					if (event.eType == frmOpenEvent)
+					{
+						DmOpenRef *dbRef;
+						
+						frmP = FrmGetActiveForm();
+						FrmDrawForm(frmP);
+						pSize = sizeof(ChineseMatePref);
+						if (PrefGetAppPreferences(appFileCreator, appPrefID, &cPref, &pSize, true) == noPreferenceFound)
+						{
+							cPref.dbID = 0;
+							cPref.addType = 0;
+							cPref.fiEnabled = false;
+							cPref.fiKey = keyHard3;
+							cPref.rigourSearch = false;
+							cPref.nativeSeach = true;
+							
+							cPref.dpEnabled = false;
+							cPref.DALaunch = daNoAction;
+							
+							PrefSetAppPreferences(appFileCreator, appPrefID, appPrefVersionNum, &cPref, pSize, true);
+						}
+						//创建数据库
+						dbRef = DmOpenDatabaseByTypeCreator('FStr', appFileCreator, dmModeReadOnly);
+						if (DmGetLastErr())
+						{
+							UInt16 recPos = 0;
+							MemHandle recH = 0;
+							MemPtr recP = 0;
+							UInt32 i;
+							DmCreateDatabase(0, "ChineseMatePuncDB", appFileCreator, 'FStr', false);
+							dbRef = DmOpenDatabaseByTypeCreator('FStr', appFileCreator, dmModeReadWrite);
+							//符号
+							recH = DmNewRecord(dbRef, &recPos, 31);
+							recP = MemHandleLock(recH);
+							for (i = 0; i < 31; i ++)
+							{
+								DmSet(recP, i, 1, 0x00);
+							}
+							DmStrCopy(recP, 0, defaultStr);
+							MemHandleUnlock(recH);
+							DmReleaseRecord(dbRef, recPos, true);
+						}
+						//获取符号集
+						recHandle = DmQueryRecord(dbRef, 0);
+						recPtr = (Char *) MemHandleLock(recHandle);
+						fldP = (FieldType *)FrmGetObjectPtr(frmP, FrmGetObjectIndex(frmP, fldCPunc));
+						FldInsert(fldP, recPtr, StrLen(recPtr));
+						MemHandleUnlock(recHandle);
+						DmCloseDatabase(dbRef);
+						FtrGet(sysFtrCreator, sysFtrNumOEMCompanyID, &companyID);
+						FtrGet(sysFtrCreator, sysFtrNumOEMDeviceID, &deviceID);
+						if ((companyID == 'hspr') && (deviceID == 'H101' || deviceID == 'H201')) //Treo600
+						{
+							cPref.dbID = DmFindDatabase(0, "Address Book");
+							PrefSetAppPreferences(appFileCreator, appPrefID, appPrefVersionNum, &cPref, pSize, true);
+						}
+						else //Treo650
+						{
+							cPref.dbID = DmFindDatabase(0, "Contacts-PAdd");
+							PrefSetAppPreferences(appFileCreator, appPrefID, appPrefVersionNum, &cPref, pSize, true);
+							
+						}
+						if ((companyID == 'hspr') && (deviceID == 'H101' || deviceID == 'H201')) //Treo600
+						{
+							cPref.addType = 0; //Address
+						}
+						else //Treo650
+						{
+							cPref.addType = 1; //Contact
+						}
+						if (cPref.fiEnabled)
+						{
+							FrmSetControlValue (frmP, FrmGetObjectIndex (frmP, pbtnEnable), 1);
+						}
+						if (cPref.rigourSearch)
+						{
+							FrmSetControlValue (frmP, FrmGetObjectIndex (frmP, cbRigourSearch), 1);
+						}
+					}
+					else
+					{
+						FrmDispatchEvent(&event);
+					}
+				}
+			}
+		}
+	} while (event.eType != appStopEvent);
+	
+	if (FtrGet(appFileCreator, 0, &cpfAddr) != ftrErrNoSuchFeature)
+	{
+		cpf = (ChineseMatePref *) cpfAddr;
+		pSize = sizeof(ChineseMatePref);
+		PrefGetAppPreferences(appFileCreator, appPrefID, cpf, &pSize, true);
+	}
+}
+
+UInt32 PilotMain(UInt16 cmd, MemPtr cmdPBP, UInt16 launchFlags)
+{
+	LocalID			dbID;
+	UInt16			cardNo;
+	UInt16			pSize;
+	FieldType		*curField;
+	TableType		*curTable;
+	FormType		*curForm;
+	UInt16			objIndex;
+	Char			*str;
+	ChineseMatePref	*cf;
+	UInt32			cfAddr;
+
+	switch (cmd)
+	{
+		case sysAppLaunchCmdNotify:
+		{
+			SysNotifyParamType * notifyPtr = (SysNotifyParamType *)cmdPBP;
+			switch (notifyPtr->notifyType)
+			{
+				case sysNotifyVirtualCharHandlingEvent:
+				{
+					//输入易
+					SysNotifyVirtualCharHandlingType * vkey = (SysNotifyVirtualCharHandlingType *)notifyPtr->notifyDetailsP;
+					cf = (ChineseMatePref *)notifyPtr->userDataP;
+					if (InsPtEnabled() && vkey->keyDown.keyCode == cf->fiKey)
+					{
+						objIndex = 0;
+						curForm = FrmGetActiveForm();
+						objIndex = FrmGetFocus(curForm);
+						if (objIndex != noFocus)
+						{
+							if (FrmGetObjectType(curForm, objIndex) == frmFieldObj)
+							{
+								curField = FrmGetObjectPtr(curForm, objIndex);
+							}
+							else if (FrmGetObjectType(curForm, objIndex) == frmTableObj)
+							{
+								curTable = FrmGetObjectPtr(curForm, objIndex);
+								curField = TblGetCurrentField(curTable);
+							}
+							if (curField)
+							{
+								vkey->keyDown.chr = 0;
+								vkey->keyDown.keyCode = 0;
+								vkey->keyDown.modifiers = 0;
+								notifyPtr->handled = true;
+								str = MemPtrNew(2048);
+								if (str)
+								{
+									str[0] = '\0'; str[2047] = '\0';
+									if (fastInputEventHandler(str, cf)) //没有错误
+									{
+										//恢复焦点
+										FrmSetActiveForm(curForm);
+										if (StrLen(str) > 0 && (FldGetMaxChars(curField) - FldGetTextLength(curField)) > StrLen(str))
+										{
+											FldInsert(curField, str, StrLen(str));
+										}
+									}
+									else
+									{
+										//恢复焦点
+										FrmSetActiveForm(curForm);
+									}
+									MemPtrFree(str);
+								}
+							}
+						}
+					}
+					break;
+				}
+			}
+			break;
+		}
+		case sysAppLaunchCmdSystemReset:
+		{
+			pSize = sizeof(ChineseMatePref);
+			cf = MemPtrNew(pSize);
+			if (PrefGetAppPreferences(appFileCreator, appPrefID, cf, &pSize, true) == noPreferenceFound)
+			{
+				cf->dbID = 0;
+				cf->addType = 0;
+				cf->nativeSeach = false;
+				cf->fiKey = keyHard3;
+				cf->fiEnabled = false;
+				
+				cf->dpEnabled = false;
+				cf->DALaunch = daNoAction;
+				PrefSetAppPreferences(appFileCreator, appPrefID, appPrefVersionNum, cf, pSize, true);
+			}
+			MemPtrSetOwner(cf, 0);
+			cfAddr = (UInt32) cf;
+			FtrSet(appFileCreator, 0, cfAddr);
+			SysCurAppDatabase(&cardNo, &dbID);
+			if (cf->fiEnabled)
+			{
+				SysNotifyRegister(cardNo, dbID, sysNotifyVirtualCharHandlingEvent, NULL, sysNotifyNormalPriority, cf);
+			}
+			break;
+		}
+		case sysAppLaunchCmdNormalLaunch:
+		{
+			launchFlags = launchFlags;
+			FrmGotoForm(MainForm);
+			AppEventLoop();
+			FrmCloseAllForms();
+			break;
+		}
+		case 13: //Panel启动
+		{
+			launchFlags = launchFlags;
+			FrmGotoForm(MainForm);
+			AppEventLoop();
+			FrmCloseAllForms();
+			break;
+		}
+	}
+
+	return errNone;
+}

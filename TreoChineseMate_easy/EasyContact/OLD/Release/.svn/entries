@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/ContactMate/Release"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   committed-rev="2"
+   name="ContactMate.prc.MAP"
+   text-time="2006-05-09T14:48:47.468750Z"
+   committed-date="2006-05-09T15:07:54.025268Z"
+   checksum="e1724df1bcc571e44cca098935c46a71"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:30:07.703125Z"
+   revision="2"/>
+<entry
+   committed-rev="2"
+   name="ContactMate.prc"
+   text-time="2006-05-09T14:48:47.484375Z"
+   committed-date="2006-05-09T15:07:54.025268Z"
+   checksum="75494d99392b3471c11ffcbf7bab622f"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:30:10.390625Z"
+   revision="2"/>
+<entry
+   committed-rev="2"
+   name="ContactMate.prc.psym"
+   text-time="2006-05-09T14:48:47.484375Z"
+   committed-date="2006-05-09T15:07:54.025268Z"
+   checksum="8409c2fbee7938b1278998e11a2c9e78"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:30:15.796875Z"
+   revision="2"/>
+</wc-entries>

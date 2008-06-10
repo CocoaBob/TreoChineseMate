@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/EasyInput/Src"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   committed-rev="1"
+   name="OLD_AddressDB.h"
+   text-time="2006-05-09T12:26:43.000000Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="f27ac64b2041a5135c0633cee88a032c"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:30.531250Z"/>
+<entry
+   committed-rev="1"
+   name="AddressDB.h"
+   text-time="2006-05-09T12:26:43.015625Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="b6dd4ab853a7210550e5032c4a93992d"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:34.343750Z"/>
+<entry
+   committed-rev="1"
+   name="EasyInput.c"
+   text-time="2006-05-09T12:26:43.031250Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="04f9abcbaa3db1d89354e4c0ba517e03"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:37.843750Z"/>
+<entry
+   committed-rev="1"
+   name="EasyInput.h"
+   text-time="2006-05-09T12:26:43.031250Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="3712273c117610729d81d9a08a83146b"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:39.500000Z"/>
+<entry
+   committed-rev="1"
+   name="OLD_AddressDB.c"
+   text-time="2006-05-09T12:26:43.046875Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="2461e9dbe697036c02f1a7ec4475b963"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:39.515625Z"/>
+<entry
+   committed-rev="1"
+   name="AddressDB.c"
+   text-time="2006-05-09T12:26:43.062500Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="ff6afe0106185fa719173b127812eb2a"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:40.453125Z"/>
+<entry
+   committed-rev="1"
+   name="OLD_AddrDefines.h"
+   text-time="2006-05-09T12:26:43.062500Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="b170f37ab858550f8846ca568a8b0fa4"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:40.468750Z"/>
+<entry
+   committed-rev="1"
+   name="AddrDefines.h"
+   text-time="2006-05-09T12:26:43.078125Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="e8dded7358c5fcc9d093e073c2ef98d3"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:42.984375Z"/>
+</wc-entries>

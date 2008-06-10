@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/EasyInput/EasyInput_Data"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   name="Release"
+   kind="dir"/>
+<entry
+   committed-rev="1"
+   name="CWSettingsWindows.stg"
+   text-time="2006-05-09T12:30:07.125000Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="f91b26ac6369d2feeff34b6017d17a3d"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:28:16.078125Z"/>
+<entry
+   name="Debug"
+   kind="dir"/>
+</wc-entries>

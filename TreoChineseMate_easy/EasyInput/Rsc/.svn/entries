@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1"
+   name=""
+   committed-date="2006-05-09T02:55:45.354550Z"
+   url="http://www.zndev.com/svn/chinesemate/EasyInput/Rsc"
+   last-author="REi"
+   kind="dir"
+   uuid="41e3c7da-4813-0410-b7a9-921e4c39dbf2"
+   repos="http://www.zndev.com/svn/chinesemate"
+   revision="1"/>
+<entry
+   committed-rev="1"
+   name="EasyInput_Rsc.rcp"
+   text-time="2006-05-09T12:26:30.343750Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="0d70cc59f9720955705079bada82c314"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:30.296875Z"/>
+<entry
+   committed-rev="1"
+   name="EasyInput_Rsc.h"
+   text-time="2006-05-09T12:26:30.343750Z"
+   committed-date="2006-05-09T02:55:45.354550Z"
+   checksum="1ee5efdee925e1d4b51270f6dce6f9af"
+   last-author="REi"
+   kind="file"
+   prop-time="2006-05-09T12:26:30.312500Z"/>
+</wc-entries>
